@@ -17,14 +17,14 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Firebase Meetup'),
+        title: const Text('Paw Rescue'),
       ),
       body: ListView(
         children: <Widget>[
-          Image.asset('assets/codelab.png'),
+          Image.asset('assets/codelab.jpg'),
           const SizedBox(height: 8),
-          const IconAndDetail(Icons.calendar_today, 'October 30'),
-          const IconAndDetail(Icons.location_city, 'San Francisco'),
+          // const IconAndDetail(Icons.calendar_today, 'October 30'),
+          // const IconAndDetail(Icons.location_city, 'San Francisco'),
           // Add from here
           Consumer<ApplicationState>(
             builder: (context, appState, _) => AuthFunc(
