@@ -2,6 +2,7 @@ import 'package:firebase_ui_auth/firebase_ui_auth.dart'; // new
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart'; // new
 import 'package:google_fonts/google_fonts.dart';
+import 'package:paw_rescue/reports_page.dart';
 import 'package:provider/provider.dart'; // new
 
 import 'app_state.dart'; // new
@@ -85,6 +86,12 @@ final _router = GoRouter(
                       },
                     ),
                   ],
+                ),
+                GoRoute(
+                  path: 'reports',
+                  builder: (context, state) {
+                    return ReportsPage();
+                  },
                 ),
                 GoRoute(
                   path: 'profile',
@@ -172,10 +179,10 @@ class ScaffoldWithNavBar extends StatelessWidget {
     if (location.startsWith('/')) {
       return 0;
     }
-    if (location.startsWith('/profile')) {
+    if (location.startsWith('/reports')) {
       return 1;
     }
-    if (location.startsWith('/reports')) {
+    if (location.startsWith('/profile')) {
       return 2;
     }
     return 0;
@@ -188,6 +195,9 @@ class ScaffoldWithNavBar extends StatelessWidget {
         context.pushReplacement('/');
         break;
       case 1:
+        context.push('/reports');
+        break;
+      case 2:
         //navigate to profile if signed in else navigate to sign-in
         final state = context.read<ApplicationState>();
         if (state.loggedIn == false) {
@@ -196,8 +206,6 @@ class ScaffoldWithNavBar extends StatelessWidget {
           context.push('/profile');
         }
         break;
-      // case 2:
-      //   GoRouter.of(context).go('/c');
     }
   }
 }
