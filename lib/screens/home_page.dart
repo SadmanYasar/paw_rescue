@@ -19,7 +19,25 @@ class HomePage extends StatelessWidget {
       ),
       body: ListView(
         children: <Widget>[
-          Image.asset('assets/logo.png'),
+          Image.asset(
+            'assets/logo.png',
+            width: 128,
+            height: 128,
+          ),
+          //a horizontal stack with heading icon with paw and a text saying Paw Rescue
+          const Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Icon(
+                Icons.pets,
+                size: 48,
+              ),
+              Text(
+                'Paw Rescue',
+                style: TextStyle(fontSize: 48),
+              ),
+            ],
+          ),
           const SizedBox(height: 8),
           // const IconAndDetail(Icons.calendar_today, 'October 30'),
           // const IconAndDetail(Icons.location_city, 'San Francisco'),
