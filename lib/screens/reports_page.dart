@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:paw_rescue/src/widgets.dart';
+import 'package:paw_rescue/widgets/widgets.dart';
 
 class ReportsPage extends StatelessWidget {
   @override
@@ -13,7 +13,7 @@ class ReportsPage extends StatelessWidget {
         itemBuilder: (context, index) {
           return Card(
             child: ListTile(
-              leading: Image.asset('assets/codelab.jpg'),
+              leading: Image.asset('assets/logo.png'),
               title: Text('Report Name'),
               subtitle: Text('Location'),
             ),

@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
-import 'src/widgets.dart';
+import 'widgets/widgets.dart';
 import 'guest_book_message.dart';
 
 class GuestBook extends StatefulWidget {
