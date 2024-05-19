@@ -123,6 +123,8 @@ class ScaffoldWithNavBar extends StatelessWidget {
   }
 
   void _onItemTapped(int index, BuildContext context) {
+    final state = context.read<ApplicationState>();
+
     switch (index) {
       case 0:
         //navigate to home
@@ -131,10 +133,14 @@ class ScaffoldWithNavBar extends StatelessWidget {
       case 1:
         //navigate to reports
         context.replace('/reports');
+        if (state.loggedIn == false) {
+          GoRouter.of(context).replace('/sign-in');
+        } else {
+          context.replace('/reports');
+        }
         break;
       case 2:
         //navigate to profile if signed in else navigate to sign-in
-        final state = context.read<ApplicationState>();
         if (state.loggedIn == false) {
           GoRouter.of(context).replace('/sign-in');
         } else {

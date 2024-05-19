@@ -32,26 +32,26 @@ class ApplicationState extends ChangeNotifier {
     FirebaseAuth.instance.userChanges().listen((user) {
       if (user != null) {
         _loggedIn = true;
-        _guestBookSubscription = FirebaseFirestore.instance
-            .collection('guestbook')
-            .orderBy('timestamp', descending: true)
-            .snapshots()
-            .listen((snapshot) {
-          _guestBookMessages = [];
-          for (final document in snapshot.docs) {
-            _guestBookMessages.add(
-              GuestBookMessage(
-                name: document.data()['name'] as String,
-                message: document.data()['text'] as String,
-              ),
-            );
-          }
-          notifyListeners();
-        });
+        // _guestBookSubscription = FirebaseFirestore.instance
+        //     .collection('guestbook')
+        //     .orderBy('timestamp', descending: true)
+        //     .snapshots()
+        //     .listen((snapshot) {
+        //   _guestBookMessages = [];
+        //   for (final document in snapshot.docs) {
+        //     _guestBookMessages.add(
+        //       GuestBookMessage(
+        //         name: document.data()['name'] as String,
+        //         message: document.data()['text'] as String,
+        //       ),
+        //     );
+        //   }
+        //   notifyListeners();
+        // });
       } else {
         _loggedIn = false;
-        _guestBookMessages = [];
-        _guestBookSubscription?.cancel();
+        // _guestBookMessages = [];
+        // _guestBookSubscription?.cancel();
       }
       notifyListeners();
     });

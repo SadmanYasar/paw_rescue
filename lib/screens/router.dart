@@ -16,7 +16,7 @@ final GlobalKey<NavigatorState> _rootNavigatorKey =
     GlobalKey<NavigatorState>(debugLabel: 'root');
 final GlobalKey<NavigatorState> _shellNavigatorKey =
     GlobalKey<NavigatorState>(debugLabel: 'shell');
-// // Add GoRouter configuration outside the App class
+
 final router = GoRouter(
   navigatorKey: _rootNavigatorKey,
   routes: <RouteBase>[
@@ -105,4 +105,3 @@ final router = GoRouter(
         ])
   ],
 );
-// end of GoRouter configuration

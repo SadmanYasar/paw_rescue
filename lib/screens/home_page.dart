@@ -15,7 +15,7 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Paw Rescue'),
+        // title: const Text('Paw Rescue'),
       ),
       body: ListView(
         children: <Widget>[
@@ -30,11 +30,11 @@ class HomePage extends StatelessWidget {
             children: <Widget>[
               Icon(
                 Icons.pets,
-                size: 48,
+                size: 32,
               ),
               Text(
                 'Paw Rescue',
-                style: TextStyle(fontSize: 48),
+                style: TextStyle(fontSize: 32),
               ),
             ],
           ),
