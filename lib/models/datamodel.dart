@@ -6,6 +6,7 @@ class Report {
   final DateTime time;
   final String address;
   final String userId;
+  final String phone;
   final String? id;
 
   Report(
@@ -14,6 +15,7 @@ class Report {
       required this.time,
       required this.address,
       required this.userId,
+      required this.phone,
       required this.id});
 
   factory Report.fromJson(Map<String, dynamic> json) {
@@ -23,6 +25,7 @@ class Report {
         time: (json['time']).toDate() ?? DateTime.now(),
         address: json['address'] ?? '',
         userId: json['userId'] ?? '',
+        phone: json['phone'] ?? '',
         id: json['id']);
   }
 
@@ -33,6 +36,7 @@ class Report {
       'time': Timestamp.fromDate(time),
       'address': address,
       'userId': userId,
+      'phone': phone,
       'id': id
     };
   }

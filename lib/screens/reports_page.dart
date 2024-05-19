@@ -20,6 +20,7 @@ class _ReportsPageState extends State<ReportsPage> {
   final _descriptionController = TextEditingController();
   final _timeController = TextEditingController();
   final _addressController = TextEditingController();
+  final _phoneController = TextEditingController();
   final reportService = ReportService();
 
   @override
@@ -50,6 +51,7 @@ class _ReportsPageState extends State<ReportsPage> {
         description: _descriptionController.text,
         time: DateTime.parse(_timeController.text),
         address: _addressController.text,
+        phone: _phoneController.text,
       );
       await reportService.createReport(report: report);
       if (mounted) {
@@ -68,6 +70,7 @@ class _ReportsPageState extends State<ReportsPage> {
         description: _descriptionController.text,
         time: DateTime.parse(_timeController.text),
         address: _addressController.text,
+        phone: _phoneController.text,
       );
       await reportService.updateReport(report: updatedReport);
       _getReports();
@@ -163,6 +166,16 @@ class _ReportsPageState extends State<ReportsPage> {
                     return null;
                   },
                 ),
+                TextFormField(
+                  controller: _phoneController..text = report?.phone ?? '',
+                  decoration: InputDecoration(labelText: 'Phone'),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter a phone number';
+                    }
+                    return null;
+                  },
+                ),
               ],
             ),
           ),
@@ -205,6 +218,35 @@ class _ReportsPageState extends State<ReportsPage> {
               leading: Image.asset('assets/logo.png'),
               title: Text(report.name),
               subtitle: Text(report.address),
+              onTap: () {
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      title: Text('Report Details'),
+                      content: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text('Name: ${report.name}'),
+                          Text('Description: ${report.description}'),
+                          Text('Time: ${report.time.toString()}'),
+                          Text('Address: ${report.address}'),
+                          Text('Phone: ${report.phone}'),
+                        ],
+                      ),
+                      actions: [
+                        StyledButton(
+                          child: Text('Close'),
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                        ),
+                      ],
+                    );
+                  },
+                );
+              },
               trailing: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [

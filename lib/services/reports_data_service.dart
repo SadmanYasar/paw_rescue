@@ -20,6 +20,7 @@ class ReportService {
           time: report.time,
           address: report.address,
           userId: report.userId,
+          phone: report.phone,
           id: docRef.id);
 
       await docRef.set(newReport.toJson());
