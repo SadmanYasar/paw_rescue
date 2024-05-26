@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import '../models/datamodel.dart';
+import '../models/report_model.dart';
 
 class ReportService {
   static final ReportService _instance = ReportService._constructor();
@@ -40,6 +40,20 @@ class ReportService {
           .toList();
     } on Exception catch (e) {
       print(e);
+      throw Exception('Failed to read reports: $e');
+    }
+  }
+
+  Future<List<Report>> getReportsByUserId({String? userId}) async {
+    try {
+      final appointmentCollection = await db
+          .collection('reports')
+          .where('userId', isEqualTo: userId)
+          .get();
+      return appointmentCollection.docs
+          .map((doc) => Report.fromJson(doc.data()))
+          .toList();
+    } on Exception catch (e) {
       throw Exception('Failed to read reports: $e');
     }
   }

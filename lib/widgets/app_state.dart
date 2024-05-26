@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart'
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:paw_rescue/services/user_service.dart';
 
 import '../firebase_options.dart';
 import '../guest_book_message.dart'; // new
@@ -15,11 +16,15 @@ class ApplicationState extends ChangeNotifier {
   }
 
   bool _loggedIn = false;
+  bool _isRescuer = false;
   bool get loggedIn => _loggedIn;
+  bool get isRescuer => _isRescuer;
 
   StreamSubscription<QuerySnapshot>? _guestBookSubscription;
   List<GuestBookMessage> _guestBookMessages = [];
   List<GuestBookMessage> get guestBookMessages => _guestBookMessages;
+
+  int currentIndex = 0;
 
   Future<void> init() async {
     await Firebase.initializeApp(
@@ -29,9 +34,10 @@ class ApplicationState extends ChangeNotifier {
       EmailAuthProvider(),
     ]);
 
-    FirebaseAuth.instance.userChanges().listen((user) {
+    FirebaseAuth.instance.userChanges().listen((user) async {
       if (user != null) {
         _loggedIn = true;
+        _isRescuer = await getUserAndRoles() == 'rescuer' ? true : false;
         // _guestBookSubscription = FirebaseFirestore.instance
         //     .collection('guestbook')
         //     .orderBy('timestamp', descending: true)
@@ -50,6 +56,7 @@ class ApplicationState extends ChangeNotifier {
         // });
       } else {
         _loggedIn = false;
+        _isRescuer = false;
         // _guestBookMessages = [];
         // _guestBookSubscription?.cancel();
       }

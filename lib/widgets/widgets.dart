@@ -1,7 +1,3 @@
-// Copyright 2022 The Flutter Authors. All rights reserved.
-// Use of this source code is governed by a BSD-style license that can be
-// found in the LICENSE file.
-
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart'; // new
 import 'package:provider/provider.dart'; // new
@@ -88,6 +84,9 @@ class ScaffoldWithNavBar extends StatelessWidget {
     return Scaffold(
       body: child,
       bottomNavigationBar: BottomNavigationBar(
+        // backgroundColor: Theme.of(context).primaryColor,
+        // selectedItemColor: Colors.yellow.shade400,
+        // unselectedItemColor: Colors.white,
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
@@ -102,7 +101,7 @@ class ScaffoldWithNavBar extends StatelessWidget {
             label: 'Profile',
           ),
         ],
-        currentIndex: _calculateSelectedIndex(context),
+        currentIndex: context.select((ApplicationState s) => s.currentIndex),
         onTap: (int idx) => _onItemTapped(idx, context),
       ),
     );
@@ -129,6 +128,8 @@ class ScaffoldWithNavBar extends StatelessWidget {
       case 0:
         //navigate to home
         context.replace('/');
+        //update current index
+        context.read<ApplicationState>().currentIndex = 0;
         break;
       case 1:
         //navigate to reports
@@ -137,6 +138,7 @@ class ScaffoldWithNavBar extends StatelessWidget {
           GoRouter.of(context).replace('/sign-in');
         } else {
           context.replace('/reports');
+          context.read<ApplicationState>().currentIndex = 1;
         }
         break;
       case 2:
@@ -145,6 +147,7 @@ class ScaffoldWithNavBar extends StatelessWidget {
           GoRouter.of(context).replace('/sign-in');
         } else {
           GoRouter.of(context).replace('/profile');
+          context.read<ApplicationState>().currentIndex = 2;
         }
         break;
     }

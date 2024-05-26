@@ -21,20 +21,22 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp.router(
       title: 'Paw Rescue',
-      themeMode: ThemeMode.system,
+      // themeMode: ThemeMode.system,
       theme: ThemeData(
         colorScheme: ColorScheme.fromSwatch(
           primarySwatch: Colors.green,
+          backgroundColor: Colors.white,
+          cardColor: Colors.white,
         ),
-        textTheme: GoogleFonts.robotoTextTheme(
+        textTheme: GoogleFonts.poppinsTextTheme(
           Theme.of(context).textTheme,
         ),
         visualDensity: VisualDensity.adaptivePlatformDensity,
         useMaterial3: true,
       ),
-      darkTheme: ThemeData.dark(
-        useMaterial3: true,
-      ),
+      // darkTheme: ThemeData.dark(
+      //   useMaterial3: true,
+      // ),
       routerConfig: router, // new
     );
   }

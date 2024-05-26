@@ -1,8 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:paw_rescue/widgets/app_state.dart';
 import 'package:paw_rescue/widgets/widgets.dart';
 
-import '../models/datamodel.dart';
+import '../models/report_model.dart';
 import '../services/reports_data_service.dart';
 
 //Create a ReportsPage screen that displays a list of reports and each report has two buttons for editing and deleting the report. After deleting the report, the list should be updated and also after editing and creating a new report, the list should be updated. For creating and updating a report, a form has to be shown with four fields: name, description, time, and address. The form should be shown in a dialog box. The reports should be fetched from the Firestore database using the reports_data_service.dart.
@@ -26,12 +27,33 @@ class _ReportsPageState extends State<ReportsPage> {
   @override
   void initState() {
     super.initState();
-    _getReports();
+    //if isRescuer show all reports
+    if (ApplicationState().isRescuer) {
+      _getReports();
+    } else {
+      //if not rescuer show only user reports
+      _getReportsByUser();
+    }
   }
 
+//TODO - WILL NEED TO MOVE THESE CRUD FUNCTIONS TO PROVIDER
   void _getReports() async {
     try {
       final reports = await reportService.getReports();
+      if (mounted) {
+        setState(() {
+          this.reports = reports;
+        });
+      }
+    } on Exception catch (e) {
+      print(e);
+    }
+  }
+
+  void _getReportsByUser() async {
+    try {
+      final reports = await reportService.getReportsByUserId(
+          userId: FirebaseAuth.instance.currentUser!.uid);
       if (mounted) {
         setState(() {
           this.reports = reports;
@@ -207,7 +229,7 @@ class _ReportsPageState extends State<ReportsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Reports Page'),
+        title: const Text('Reports'),
       ),
       body: ListView.builder(
         itemCount: reports.length,
