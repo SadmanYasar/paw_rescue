@@ -10,7 +10,9 @@ import 'package:go_router/go_router.dart'; // new
 import 'package:paw_rescue/screens/reports_page.dart';
 
 import 'package:paw_rescue/screens/home_page.dart';
+import 'package:paw_rescue/widgets/app_state.dart';
 import 'package:paw_rescue/widgets/widgets.dart';
+import 'package:provider/provider.dart';
 
 final GlobalKey<NavigatorState> _rootNavigatorKey =
     GlobalKey<NavigatorState>(debugLabel: 'root');
@@ -96,6 +98,8 @@ final router = GoRouter(
                       actions: [
                         SignedOutAction((context) {
                           context.pushReplacement('/');
+                          //change current index
+                          context.read<ApplicationState>().currentIndex = 0;
                         }),
                       ],
                     );

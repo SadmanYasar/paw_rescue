@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:paw_rescue/widgets/app_state.dart';
 import 'package:paw_rescue/widgets/widgets.dart';
+import 'package:provider/provider.dart';
 
 import '../models/report_model.dart';
 import '../services/reports_data_service.dart';
@@ -28,7 +29,7 @@ class _ReportsPageState extends State<ReportsPage> {
   void initState() {
     super.initState();
     //if isRescuer show all reports
-    if (ApplicationState().isRescuer) {
+    if (Provider.of<ApplicationState>(context, listen: false).isRescuer) {
       _getReports();
     } else {
       //if not rescuer show only user reports

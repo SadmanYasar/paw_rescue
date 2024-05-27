@@ -2,15 +2,25 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart'; // new
 import 'package:paw_rescue/screens/router.dart'; // new
+import 'services/reports_data_service.dart';
 import 'widgets/app_state.dart'; // new
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
 
-  runApp(ChangeNotifierProvider(
-    create: (context) => ApplicationState(),
-    builder: ((context, child) => const App()),
-  ));
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (context) => ApplicationState(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => ReportService(),
+        )
+      ],
+      child: const App(),
+    ),
+  );
 }
 
 // Change MaterialApp to MaterialApp.router and add the routerConfig

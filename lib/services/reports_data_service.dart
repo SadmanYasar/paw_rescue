@@ -1,9 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../models/report_model.dart';
+import 'package:flutter/foundation.dart';
 
-class ReportService {
+class ReportService extends ChangeNotifier {
   static final ReportService _instance = ReportService._constructor();
   final db = FirebaseFirestore.instance;
+  List<Report> reports = [];
+  final bool _isLoading = false;
+
+  bool get isLoading => _isLoading;
 
   factory ReportService() {
     return _instance;
@@ -77,5 +82,3 @@ class ReportService {
     }
   }
 }
-
-//final todoDataService = TodoDataServiceRest();
