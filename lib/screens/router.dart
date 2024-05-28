@@ -7,6 +7,8 @@ Contains the GoRouter configuration
 import 'package:firebase_ui_auth/firebase_ui_auth.dart'; // new
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart'; // new
+import 'package:paw_rescue/models/report_model.dart';
+import 'package:paw_rescue/screens/edit_report.dart';
 import 'package:paw_rescue/screens/reports_page.dart';
 
 import 'package:paw_rescue/screens/home_page.dart';
@@ -88,6 +90,16 @@ final router = GoRouter(
                   path: 'reports',
                   builder: (context, state) {
                     return ReportsPage();
+                  },
+                ),
+                GoRoute(
+                  path: 'edit-report',
+                  name: 'edit-report',
+                  builder: (context, state) {
+                    Report? report = state.extra as Report?;
+                    return EditReportScreen(
+                      report: report,
+                    );
                   },
                 ),
                 GoRoute(
