@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart'; // new
 import 'package:paw_rescue/screens/router.dart'; // new
 import 'services/reports_data_service.dart';

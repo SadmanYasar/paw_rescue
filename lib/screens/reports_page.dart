@@ -50,69 +50,81 @@ class _ReportsPageState extends State<ReportsPage> {
       ),
       body: Consumer<ReportService>(
         builder: (context, reportService, _) {
-          return ListView.builder(
-            itemCount: reportService.reports.length,
-            itemBuilder: (context, index) {
-              final report = reportService.reports[index];
-              return Card(
-                child: ListTile(
-                  leading: Image.asset('assets/logo.png'),
-                  title: Text(report.name),
-                  subtitle: Text(report.address),
-                  onTap: () {
-                    showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return AlertDialog(
-                          title: const Text('Report Details'),
-                          content: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Text('Name: ${report.name}'),
-                              Text('Description: ${report.description}'),
-                              Text('Time: ${report.time.toString()}'),
-                              Text('Address: ${report.address}'),
-                              Text('Phone: ${report.phone}'),
-                            ],
-                          ),
-                          actions: [
-                            StyledButton(
-                              child: const Text('Close'),
-                              onPressed: () {
-                                Navigator.of(context).pop();
-                              },
+          if (reportService.isLoading) {
+            // Show a loading circle
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          } else {
+            if (reportService.reports.isEmpty) {
+              return const Center(
+                child: Text('No reports found'),
+              );
+            }
+            return ListView.builder(
+              itemCount: reportService.reports.length,
+              itemBuilder: (context, index) {
+                final report = reportService.reports[index];
+                return Card(
+                  child: ListTile(
+                    leading: Image.asset('assets/logo.png'),
+                    title: Text(report.name),
+                    subtitle: Text(report.address),
+                    onTap: () {
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: const Text('Report Details'),
+                            content: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text('Name: ${report.name}'),
+                                Text('Description: ${report.description}'),
+                                Text('Time: ${report.time.toString()}'),
+                                Text('Address: ${report.address}'),
+                                Text('Phone: ${report.phone}'),
+                              ],
                             ),
-                          ],
-                        );
-                      },
-                    );
-                  },
-                  trailing: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      IconButton(
-                        icon: const Icon(Icons.edit),
-                        onPressed: () {
-                          //route to edit_report
-                          context.pushNamed(
-                            'edit-report',
-                            extra: report,
+                            actions: [
+                              StyledButton(
+                                child: const Text('Close'),
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                              ),
+                            ],
                           );
                         },
-                      ),
-                      IconButton(
-                        icon: const Icon(Icons.delete),
-                        onPressed: () {
-                          _deleteReport(report);
-                        },
-                      ),
-                    ],
+                      );
+                    },
+                    trailing: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        IconButton(
+                          icon: const Icon(Icons.edit),
+                          onPressed: () {
+                            //route to edit_report
+                            context.pushNamed(
+                              'edit-report',
+                              extra: report,
+                            );
+                          },
+                        ),
+                        IconButton(
+                          icon: const Icon(Icons.delete),
+                          onPressed: () {
+                            _deleteReport(report);
+                          },
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-              );
-            },
-          );
+                );
+              },
+            );
+          }
         },
       ),
       floatingActionButton: FloatingActionButton(
