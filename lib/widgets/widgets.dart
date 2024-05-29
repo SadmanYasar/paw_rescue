@@ -60,7 +60,7 @@ class StyledButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) => OutlinedButton(
         style: OutlinedButton.styleFrom(
-            side: const BorderSide(color: Colors.deepPurple)),
+            side: const BorderSide(color: Colors.green)),
         onPressed: onPressed,
         child: child,
       );
@@ -84,9 +84,6 @@ class ScaffoldWithNavBar extends StatelessWidget {
     return Scaffold(
       body: child,
       bottomNavigationBar: BottomNavigationBar(
-        // backgroundColor: Theme.of(context).primaryColor,
-        // selectedItemColor: Colors.yellow.shade400,
-        // unselectedItemColor: Colors.white,
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
