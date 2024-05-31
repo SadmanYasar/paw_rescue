@@ -1,4 +1,9 @@
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:paw_rescue/firebase_options.dart';
+import 'package:paw_rescue/services/adoption_data_service.dart';
+import 'package:paw_rescue/services/animal_data_service.dart';
 import 'package:provider/provider.dart'; // new
 import 'package:paw_rescue/screens/router.dart'; // new
 import 'services/reports_data_service.dart';
@@ -14,6 +19,12 @@ void main() async {
   final themeJson = jsonDecode(themeStr);
   final theme = ThemeDecoder.decodeThemeData(themeJson)!;
 
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+
+  FirebaseUIAuth.configureProviders([
+    EmailAuthProvider(),
+  ]);
+
   runApp(
     MultiProvider(
       providers: [
@@ -22,7 +33,10 @@ void main() async {
         ),
         ChangeNotifierProvider(
           create: (context) => ReportService(),
-        )
+        ),
+        ChangeNotifierProvider(
+          create: (context) => AnimalService(),
+        ),
       ],
       child: App(
         theme: theme,

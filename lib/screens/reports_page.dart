@@ -102,22 +102,28 @@ class _ReportsPageState extends State<ReportsPage> {
                     trailing: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        IconButton(
-                          icon: const Icon(Icons.edit),
-                          onPressed: () {
-                            //route to edit_report
-                            context.pushNamed(
-                              'edit-report',
-                              extra: report,
-                            );
-                          },
-                        ),
-                        IconButton(
-                          icon: const Icon(Icons.delete),
-                          onPressed: () {
-                            _deleteReport(report);
-                          },
-                        ),
+                        if (!Provider.of<ApplicationState>(context,
+                                listen: false)
+                            .isRescuer)
+                          IconButton(
+                            icon: const Icon(Icons.edit),
+                            onPressed: () {
+                              //route to edit_report
+                              context.pushNamed(
+                                'edit-report',
+                                extra: report,
+                              );
+                            },
+                          ),
+                        if (!Provider.of<ApplicationState>(context,
+                                listen: false)
+                            .isRescuer)
+                          IconButton(
+                            icon: const Icon(Icons.delete),
+                            onPressed: () {
+                              _deleteReport(report);
+                            },
+                          ),
                       ],
                     ),
                   ),
@@ -127,12 +133,15 @@ class _ReportsPageState extends State<ReportsPage> {
           }
         },
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          context.pushNamed('edit-report');
-        },
-        child: const Icon(Icons.add),
-      ),
+      floatingActionButton:
+          !Provider.of<ApplicationState>(context, listen: false).isRescuer
+              ? FloatingActionButton(
+                  onPressed: () {
+                    context.pushNamed('edit-report');
+                  },
+                  child: const Icon(Icons.add),
+                )
+              : null,
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     );
   }

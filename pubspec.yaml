@@ -42,6 +42,9 @@ dependencies:
   provider: ^6.1.2
   firebase_ui_auth: ^1.13.1
   json_theme: ^6.4.0
+  image_picker: ^1.1.1
+  firebase_storage: ^11.7.7
+  http: ^1.2.1
 
 dev_dependencies:
   flutter_test:
