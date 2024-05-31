@@ -17,6 +17,7 @@ class ApplicationState extends ChangeNotifier {
   bool _isRescuer = false;
   bool get loggedIn => _loggedIn;
   bool get isRescuer => _isRescuer;
+  bool isLoading = false;
 
   // StreamSubscription<QuerySnapshot>? _guestBookSubscription;
   // List<GuestBookMessage> _guestBookMessages = [];
@@ -25,12 +26,15 @@ class ApplicationState extends ChangeNotifier {
   int currentIndex = 0;
 
   Future<void> init() async {
-    await Firebase.initializeApp(
-        options: DefaultFirebaseOptions.currentPlatform);
+    isLoading = true;
+    notifyListeners();
 
-    FirebaseUIAuth.configureProviders([
-      EmailAuthProvider(),
-    ]);
+    // await Firebase.initializeApp(
+    //     options: DefaultFirebaseOptions.currentPlatform);
+
+    // FirebaseUIAuth.configureProviders([
+    //   EmailAuthProvider(),
+    // ]);
 
     FirebaseAuth.instance.userChanges().listen((user) async {
       if (user != null) {
@@ -59,6 +63,8 @@ class ApplicationState extends ChangeNotifier {
         // _guestBookMessages = [];
         // _guestBookSubscription?.cancel();
       }
+
+      isLoading = false;
       notifyListeners();
     });
   }

@@ -84,6 +84,7 @@ class ScaffoldWithNavBar extends StatelessWidget {
     return Scaffold(
       body: child,
       bottomNavigationBar: BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
@@ -92,6 +93,14 @@ class ScaffoldWithNavBar extends StatelessWidget {
           BottomNavigationBarItem(
             icon: Icon(Icons.notification_important_rounded),
             label: 'Reports',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.announcement),
+            label: 'Applications',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.medical_information),
+            label: 'Medicines',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.settings),
@@ -104,19 +113,19 @@ class ScaffoldWithNavBar extends StatelessWidget {
     );
   }
 
-  static int _calculateSelectedIndex(BuildContext context) {
-    final String location = GoRouterState.of(context).uri.path;
-    if (location.startsWith('/')) {
-      return 0;
-    }
-    if (location.startsWith('/reports')) {
-      return 1;
-    }
-    if (location.startsWith('/profile')) {
-      return 2;
-    }
-    return 0;
-  }
+  // static int _calculateSelectedIndex(BuildContext context) {
+  //   final String location = GoRouterState.of(context).uri.path;
+  //   if (location.startsWith('/')) {
+  //     return 0;
+  //   }
+  //   if (location.startsWith('/reports')) {
+  //     return 1;
+  //   }
+  //   if (location.startsWith('/profile')) {
+  //     return 2;
+  //   }
+  //   return 0;
+  // }
 
   void _onItemTapped(int index, BuildContext context) {
     final state = context.read<ApplicationState>();
@@ -131,22 +140,45 @@ class ScaffoldWithNavBar extends StatelessWidget {
       case 1:
         //navigate to reports
         context.replace('/reports');
-        if (state.loggedIn == false) {
-          GoRouter.of(context).replace('/sign-in');
-        } else {
-          context.replace('/reports');
-          context.read<ApplicationState>().currentIndex = 1;
-        }
+        // if (state.loggedIn == false) {
+        //   GoRouter.of(context).replace('/sign-in');
+        // } else {
+        //   context.replace('/reports');
+        //   context.read<ApplicationState>().currentIndex = 1;
+        // }
+        authenticatedRouteGenerate(context, '/reports', index);
         break;
       case 2:
         //navigate to profile if signed in else navigate to sign-in
-        if (state.loggedIn == false) {
-          GoRouter.of(context).replace('/sign-in');
-        } else {
-          GoRouter.of(context).replace('/profile');
-          context.read<ApplicationState>().currentIndex = 2;
-        }
+        // if (state.loggedIn == false) {
+        //   GoRouter.of(context).replace('/sign-in');
+        // } else {
+        //   GoRouter.of(context).replace('/profile');
+        //   context.read<ApplicationState>().currentIndex = 2;
+        // }
+        authenticatedRouteGenerate(context, '/applications', index);
         break;
+      case 3:
+        //navigate to profile if signed in else navigate to sign-in
+        // if (state.loggedIn == false) {
+        //   GoRouter.of(context).replace('/sign-in');
+        // } else {
+        //   GoRouter.of(context).replace('/profile');
+        //   context.read<ApplicationState>().currentIndex = 2;
+        // }
+        authenticatedRouteGenerate(context, '/profile', index);
+        break;
+    }
+  }
+
+  void authenticatedRouteGenerate(
+      BuildContext context, String route, int index) {
+    final state = context.read<ApplicationState>();
+    if (state.loggedIn == false) {
+      GoRouter.of(context).replace('/sign-in');
+    } else {
+      GoRouter.of(context).replace(route);
+      context.read<ApplicationState>().currentIndex = index;
     }
   }
 }

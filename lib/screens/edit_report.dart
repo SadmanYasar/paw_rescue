@@ -78,6 +78,7 @@ class _EditReportScreenState extends State<EditReportScreen> {
                 TextFormField(
                   controller: _timeController,
                   decoration: const InputDecoration(labelText: 'Time'),
+                  readOnly: true,
                   validator: (value) {
                     if (value!.isEmpty) {
                       return 'Please enter a time';
@@ -89,6 +90,16 @@ class _EditReportScreenState extends State<EditReportScreen> {
                   },
                 ),
                 ElevatedButton(
+                  style: ButtonStyle(
+                    //make it full width
+                    minimumSize: MaterialStateProperty.all<Size>(
+                      const Size(double.infinity, 50),
+                    ),
+                    //add padding to the button
+                    padding: MaterialStateProperty.all<EdgeInsets>(
+                      const EdgeInsets.all(16.0),
+                    ),
+                  ),
                   onPressed: () {
                     showDatePicker(
                       context: context,
@@ -145,6 +156,16 @@ class _EditReportScreenState extends State<EditReportScreen> {
                 ),
                 const SizedBox(height: 16.0),
                 ElevatedButton(
+                  style: ButtonStyle(
+                    //make it full width
+                    minimumSize: MaterialStateProperty.all<Size>(
+                      const Size(double.infinity, 50),
+                    ),
+                    //add padding to the button
+                    padding: MaterialStateProperty.all<EdgeInsets>(
+                      const EdgeInsets.all(16.0),
+                    ),
+                  ),
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {
                       _formKey.currentState!.save();
