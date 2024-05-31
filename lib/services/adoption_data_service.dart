@@ -1,12 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 import '../models/adoption_model.dart';
 
-class AdoptionService {
+class AdoptionService extends ChangeNotifier {
   final db = FirebaseFirestore.instance;
   List<Adoption> reports = [];
-  final bool _isLoading = false;
-
-  bool get isLoading => _isLoading;
+  bool isLoading = false;
 
   // Create an adoption
   Future<Adoption> createAdoption({Adoption? adoption}) async {
