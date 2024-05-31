@@ -11,6 +11,7 @@ import 'package:paw_rescue/models/animal_model.dart';
 import 'package:paw_rescue/models/report_model.dart';
 import 'package:paw_rescue/screens/edit_animal.dart';
 import 'package:paw_rescue/screens/edit_report.dart';
+import 'package:paw_rescue/screens/medication_page.dart';
 import 'package:paw_rescue/screens/reports_page.dart';
 
 import 'package:paw_rescue/screens/home_page.dart';
@@ -131,6 +132,13 @@ final router = GoRouter(
                 return EditAnimalScreen(
                   animal: animal,
                 );
+              },
+            ),
+            GoRoute(
+              path: 'medicines',
+              name: 'medicines',
+              builder: (context, state) {
+                return MedicationScreen();
               },
             ),
             GoRoute(

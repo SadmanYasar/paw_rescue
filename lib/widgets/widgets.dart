@@ -166,6 +166,16 @@ class ScaffoldWithNavBar extends StatelessWidget {
         //   GoRouter.of(context).replace('/profile');
         //   context.read<ApplicationState>().currentIndex = 2;
         // }
+        authenticatedRouteGenerate(context, '/medicines', index);
+        break;
+      case 4:
+        //navigate to profile if signed in else navigate to sign-in
+        // if (state.loggedIn == false) {
+        //   GoRouter.of(context).replace('/sign-in');
+        // } else {
+        //   GoRouter.of(context).replace('/profile');
+        //   context.read<ApplicationState>().currentIndex = 2;
+        // }
         authenticatedRouteGenerate(context, '/profile', index);
         break;
     }
