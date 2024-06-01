@@ -6,6 +6,12 @@ import '../services/adoption_data_service.dart';
 import '../widgets/app_state.dart';
 import '../widgets/widgets.dart';
 
+/* 
+==============================================
+Accessed by all auth roles to view adoptions
+==============================================
+*/
+
 class AdoptionPage extends StatefulWidget {
   const AdoptionPage({super.key});
 

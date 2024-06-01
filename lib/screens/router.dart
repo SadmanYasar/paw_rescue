@@ -7,8 +7,12 @@ Contains the GoRouter configuration
 import 'package:firebase_ui_auth/firebase_ui_auth.dart'; // new
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart'; // new
+import 'package:paw_rescue/models/adoption_model.dart';
 import 'package:paw_rescue/models/animal_model.dart';
 import 'package:paw_rescue/models/report_model.dart';
+import 'package:paw_rescue/screens/adoption_page.dart';
+import 'package:paw_rescue/screens/application_page.dart';
+import 'package:paw_rescue/screens/edit_adoption.dart';
 import 'package:paw_rescue/screens/edit_animal.dart';
 import 'package:paw_rescue/screens/edit_report.dart';
 import 'package:paw_rescue/screens/medication_page.dart';
@@ -138,10 +142,28 @@ final router = GoRouter(
               path: 'adopt-animal',
               name: 'adopt-animal',
               builder: (context, state) {
-                Animal? animal = state.extra as Animal?;
-                return EditAnimalScreen(
+                Animal? animal = state.extra as Animal;
+                return ApplicationScreen(
                   animal: animal,
                 );
+              },
+            ),
+            GoRoute(
+              path: 'edit-adoption',
+              name: 'edit-adoption',
+              builder: (context, state) {
+                Adoption adoption = state.extra as Adoption;
+                return EditAdoptionScreen(
+                  adoption: adoption,
+                );
+              },
+            ),
+            GoRoute(
+              path: 'applications',
+              name: 'applications',
+              builder: (context, state) {
+                Animal animal = state.extra as Animal;
+                return AdoptionPage();
               },
             ),
             GoRoute(

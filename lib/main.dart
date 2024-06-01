@@ -37,6 +37,9 @@ void main() async {
         ChangeNotifierProvider(
           create: (context) => AnimalService(),
         ),
+        ChangeNotifierProvider(
+          create: (context) => AdoptionService(),
+        ),
       ],
       child: App(
         theme: theme,
