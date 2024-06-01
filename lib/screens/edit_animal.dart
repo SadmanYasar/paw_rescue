@@ -24,9 +24,7 @@ class _EditAnimalScreenState extends State<EditAnimalScreen> {
   final _ageController = TextEditingController();
   final _breedController = TextEditingController();
   String imageURL = '';
-
-  CollectionReference _reference =
-      FirebaseFirestore.instance.collection('animals');
+  String uploadState = '';
 
   @override
   void initState() {
@@ -101,10 +99,16 @@ class _EditAnimalScreenState extends State<EditAnimalScreen> {
                       ImagePicker imagePicker = ImagePicker();
                       XFile? file = await imagePicker.pickImage(
                         source: ImageSource.gallery,
+                        imageQuality: 25
                       );
                       print('${file?.path}');
 
                       if (file == null) return;
+
+                      setState(() {
+                        uploadState = 'Uploading image...';
+                      });
+
                       String uniqueFileName =
                           DateTime.now().millisecondsSinceEpoch.toString();
 
@@ -124,12 +128,20 @@ class _EditAnimalScreenState extends State<EditAnimalScreen> {
                         //Success: get the download URL
                         imageURL =
                             await referenceImageToUpload.getDownloadURL();
+
+                        setState(() {
+                          uploadState = 'Image uploaded successfully';
+                        });
                       } catch (error) {
                         //Some error occurred
+                        setState(() {
+                          uploadState = 'Failed to upload image';
+                        });
                         print('Error uploading image: $error');
                       }
                     },
                     icon: const Icon(Icons.camera_alt)),
+                if (uploadState.isNotEmpty) Text(uploadState),
                 const SizedBox(height: 16.0),
                 ElevatedButton(
                   style: ButtonStyle(
