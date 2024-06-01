@@ -135,6 +135,16 @@ final router = GoRouter(
               },
             ),
             GoRoute(
+              path: 'adopt-animal',
+              name: 'adopt-animal',
+              builder: (context, state) {
+                Animal? animal = state.extra as Animal?;
+                return EditAnimalScreen(
+                  animal: animal,
+                );
+              },
+            ),
+            GoRoute(
               path: 'medicines',
               name: 'medicines',
               builder: (context, state) {
@@ -156,8 +166,8 @@ final router = GoRouter(
                         actions: [
                           SignedOutAction((context) {
                             context.pushReplacement('/');
+                            appState.currentIndex = 0;
                             //change current index
-                            context.read<ApplicationState>().currentIndex = 0;
                           }),
                         ],
                       );

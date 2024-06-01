@@ -33,6 +33,7 @@ class _EditAnimalScreenState extends State<EditAnimalScreen> {
       _nameController.text = widget.animal!.name;
       _ageController.text = widget.animal!.age;
       _breedController.text = widget.animal!.breed;
+      imageURL = widget.animal!.imageURL;
     }
   }
 
@@ -98,9 +99,7 @@ class _EditAnimalScreenState extends State<EditAnimalScreen> {
                     onPressed: () async {
                       ImagePicker imagePicker = ImagePicker();
                       XFile? file = await imagePicker.pickImage(
-                        source: ImageSource.gallery,
-                        imageQuality: 25
-                      );
+                          source: ImageSource.gallery, imageQuality: 25);
                       print('${file?.path}');
 
                       if (file == null) return;
@@ -118,8 +117,14 @@ class _EditAnimalScreenState extends State<EditAnimalScreen> {
                           referenceRoot.child('images');
 
                       //Create a reference for the image to be stored
-                      Reference referenceImageToUpload =
-                          referenceDirImages.child(uniqueFileName);
+                      Reference referenceImageToUpload;
+                      if (widget.animal?.imageURL != null) {
+                        referenceImageToUpload = FirebaseStorage.instance
+                            .refFromURL(widget.animal!.imageURL);
+                      } else {
+                        referenceImageToUpload =
+                            referenceDirImages.child(uniqueFileName);
+                      }
 
                       //Handle errors/success
                       try {

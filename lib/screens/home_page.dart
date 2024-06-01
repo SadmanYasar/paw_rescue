@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:paw_rescue/models/animal_model.dart';
 import 'package:paw_rescue/services/animal_data_service.dart';
 import 'package:paw_rescue/widgets/app_state.dart';
 import 'package:provider/provider.dart';
@@ -20,6 +21,11 @@ class _HomePageState extends State<HomePage> {
 
   Future<void> _getAnimals() {
     return Provider.of<AnimalService>(context, listen: false).getAnimals();
+  }
+
+  Future<void> _deleteAnimal(Animal animal) {
+    return Provider.of<AnimalService>(context, listen: false)
+        .deleteAnimal(id: animal.id);
   }
 
   @override
@@ -83,7 +89,7 @@ class _HomePageState extends State<HomePage> {
                 }
                 return ListView.builder(
                   shrinkWrap: true,
-                  physics: BouncingScrollPhysics(), // Add this line
+                  physics: const BouncingScrollPhysics(), // Add this line
                   itemCount: animalService.animals.length,
                   itemBuilder: (context, index) {
                     final animal = animalService.animals[index];
@@ -111,7 +117,7 @@ class _HomePageState extends State<HomePage> {
                                     Padding(
                                       padding: const EdgeInsets.all(8.0),
                                       child: Text(
-                                        animal.name,
+                                        '${animal.name} ⦿ ${animal.age}',
                                         style: const TextStyle(
                                             fontWeight: FontWeight.bold),
                                       ),
@@ -124,17 +130,85 @@ class _HomePageState extends State<HomePage> {
                                 ),
                                 Padding(
                                   padding: const EdgeInsets.only(right: 8.0),
-                                  child: OutlinedButton(
-                                    style: OutlinedButton.styleFrom(
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(20),
-                                      ),
-                                    ),
-                                    onPressed: () {
-                                      context.pushNamed('edit-animal',
-                                          extra: animal);
-                                    },
-                                    child: const Text("Edit"),
+                                  child: Row(
+                                    children: [
+                                      if (Provider.of<ApplicationState>(context,
+                                              listen: false)
+                                          .isRescuer) ...[
+                                        OutlinedButton(
+                                          style: OutlinedButton.styleFrom(
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(20),
+                                            ),
+                                          ),
+                                          onPressed: () {
+                                            context.pushNamed('edit-animal',
+                                                extra: animal);
+                                          },
+                                          child: const Text("Edit"),
+                                        ),
+                                        const SizedBox(width: 8),
+                                        OutlinedButton(
+                                          style: OutlinedButton.styleFrom(
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(20),
+                                            ),
+                                          ),
+                                          onPressed: () {
+                                            showDialog(
+                                              context: context,
+                                              builder: (context) {
+                                                return AlertDialog(
+                                                  title: const Text('Delete'),
+                                                  content: const Text(
+                                                      'Are you sure you want to delete this animal?'),
+                                                  actions: [
+                                                    TextButton(
+                                                      onPressed: () {
+                                                        Navigator.of(context)
+                                                            .pop();
+                                                      },
+                                                      child:
+                                                          const Text('Cancel'),
+                                                    ),
+                                                    TextButton(
+                                                      onPressed: () {
+                                                        _deleteAnimal(animal)
+                                                            .then((value) {
+                                                          Navigator.of(context)
+                                                              .pop();
+                                                        });
+                                                      },
+                                                      child:
+                                                          const Text('Delete'),
+                                                    ),
+                                                  ],
+                                                );
+                                              },
+                                            );
+                                          },
+                                          child: const Text("Delete"),
+                                        ),
+                                      ] else if (Provider.of<ApplicationState>(
+                                              context,
+                                              listen: false)
+                                          .loggedIn)
+                                        OutlinedButton(
+                                          style: OutlinedButton.styleFrom(
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(20),
+                                            ),
+                                          ),
+                                          onPressed: () {
+                                            context.pushNamed('adopt-animal',
+                                                extra: animal);
+                                          },
+                                          child: const Text("Adopt"),
+                                        ),
+                                    ],
                                   ),
                                 )
                               ],

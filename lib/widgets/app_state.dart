@@ -60,6 +60,7 @@ class ApplicationState extends ChangeNotifier {
       } else {
         _loggedIn = false;
         _isRescuer = false;
+        currentIndex = 0;
         // _guestBookMessages = [];
         // _guestBookSubscription?.cancel();
       }

@@ -128,8 +128,6 @@ class ScaffoldWithNavBar extends StatelessWidget {
   // }
 
   void _onItemTapped(int index, BuildContext context) {
-    final state = context.read<ApplicationState>();
-
     switch (index) {
       case 0:
         //navigate to home
