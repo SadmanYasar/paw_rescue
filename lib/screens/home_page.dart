@@ -83,6 +83,7 @@ class _HomePageState extends State<HomePage> {
                 }
                 return ListView.builder(
                   shrinkWrap: true,
+                  physics: BouncingScrollPhysics(), // Add this line
                   itemCount: animalService.animals.length,
                   itemBuilder: (context, index) {
                     final animal = animalService.animals[index];

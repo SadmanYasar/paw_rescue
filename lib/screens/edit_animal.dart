@@ -1,8 +1,13 @@
 //edit_report.dart
+import 'dart:io';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:paw_rescue/models/animal_model.dart';
 import 'package:paw_rescue/services/animal_data_service.dart';
 import 'package:provider/provider.dart';
+import 'package:image_picker/image_picker.dart';
 
 class EditAnimalScreen extends StatefulWidget {
   final Animal? animal;
@@ -18,8 +23,10 @@ class _EditAnimalScreenState extends State<EditAnimalScreen> {
   final _nameController = TextEditingController();
   final _ageController = TextEditingController();
   final _breedController = TextEditingController();
-  //image upload controller
-  final _imageURLController = TextEditingController();
+  String imageURL = '';
+
+  CollectionReference _reference =
+      FirebaseFirestore.instance.collection('animals');
 
   @override
   void initState() {
@@ -28,7 +35,6 @@ class _EditAnimalScreenState extends State<EditAnimalScreen> {
       _nameController.text = widget.animal!.name;
       _ageController.text = widget.animal!.age;
       _breedController.text = widget.animal!.breed;
-      _imageURLController.text = widget.animal!.imageURL;
     }
   }
 
@@ -90,6 +96,40 @@ class _EditAnimalScreenState extends State<EditAnimalScreen> {
                     _breedController.text = value!;
                   },
                 ),
+                IconButton(
+                    onPressed: () async {
+                      ImagePicker imagePicker = ImagePicker();
+                      XFile? file = await imagePicker.pickImage(
+                        source: ImageSource.gallery,
+                      );
+                      print('${file?.path}');
+
+                      if (file == null) return;
+                      String uniqueFileName =
+                          DateTime.now().millisecondsSinceEpoch.toString();
+
+                      //Get a reference to storage root
+                      Reference referenceRoot = FirebaseStorage.instance.ref();
+                      Reference referenceDirImages =
+                          referenceRoot.child('images');
+
+                      //Create a reference for the image to be stored
+                      Reference referenceImageToUpload =
+                          referenceDirImages.child(uniqueFileName);
+
+                      //Handle errors/success
+                      try {
+                        //Store the file
+                        await referenceImageToUpload.putFile(File(file.path));
+                        //Success: get the download URL
+                        imageURL =
+                            await referenceImageToUpload.getDownloadURL();
+                      } catch (error) {
+                        //Some error occurred
+                        print('Error uploading image: $error');
+                      }
+                    },
+                    icon: const Icon(Icons.camera_alt)),
                 const SizedBox(height: 16.0),
                 ElevatedButton(
                   style: ButtonStyle(
@@ -103,13 +143,20 @@ class _EditAnimalScreenState extends State<EditAnimalScreen> {
                     ),
                   ),
                   onPressed: () {
+                    if (imageURL.isEmpty) {
+                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                          content: Text('Please upload an image')));
+
+                      return;
+                    }
+
                     if (_formKey.currentState!.validate()) {
                       _formKey.currentState!.save();
                       final animal = Animal(
                         name: _nameController.text,
                         age: _ageController.text,
                         breed: _breedController.text,
-                        imageURL: _imageURLController.text,
+                        imageURL: imageURL,
                         id: widget.animal?.id,
                       );
                       if (widget.animal == null) {
