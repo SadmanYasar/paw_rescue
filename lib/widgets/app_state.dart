@@ -26,8 +26,8 @@ class ApplicationState extends ChangeNotifier {
   int currentIndex = 0;
 
   Future<void> init() async {
-    isLoading = true;
-    notifyListeners();
+    // isLoading = true;
+    // notifyListeners();
 
     // await Firebase.initializeApp(
     //     options: DefaultFirebaseOptions.currentPlatform);

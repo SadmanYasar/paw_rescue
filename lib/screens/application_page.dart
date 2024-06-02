@@ -33,6 +33,14 @@ class _ApplicationScreenState extends State<ApplicationScreen> {
         application: _reasonController.text,
       ),
     );
+    //show a snackbar
+    if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Application Submitted'),
+        ),
+      );
+    }
   }
 
   @override

@@ -25,19 +25,23 @@ class _MedicationScreenState extends State<MedicationScreen> {
     final medicineService = Provider.of<MedicineService>(context);
     final medicines = medicineService.medicines;
 
-    return ListView.builder(
-      itemCount: medicines.length,
-      itemBuilder: (context, index) {
-        final medicine = medicines[index];
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Medications'),
+      ),
+      body: ListView.builder(
+          itemCount: medicines.length,
+          itemBuilder: (context, index) {
+            final medicine = medicines[index];
 
-        return Card(
-          child: ListTile(
-            title: Text(medicine.name),
-            subtitle: Text(medicine.description),
-            trailing: Text('\$${medicine.price.toStringAsFixed(2)}'),
-          ),
-        );
-      },
+            return Card(
+              child: ListTile(
+                title: Text(medicine.name),
+                subtitle: Text(medicine.description),
+                trailing: Text('\$${medicine.price.toStringAsFixed(2)}'),
+              ),
+            );
+          }),
     );
   }
 }
