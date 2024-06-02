@@ -162,7 +162,6 @@ final router = GoRouter(
               path: 'applications',
               name: 'applications',
               builder: (context, state) {
-                Animal animal = state.extra as Animal;
                 return AdoptionPage();
               },
             ),
@@ -176,25 +175,15 @@ final router = GoRouter(
             GoRoute(
               path: 'profile',
               builder: (context, state) {
-                return Consumer<ApplicationState>(
-                  builder: (context, appState, child) {
-                    if (appState.isLoading) {
-                      return const Center(
-                        child: CircularProgressIndicator(),
-                      );
-                    } else {
-                      return ProfileScreen(
-                        providers: const [],
-                        actions: [
-                          SignedOutAction((context) {
-                            context.pushReplacement('/');
-                            appState.currentIndex = 0;
-                            //change current index
-                          }),
-                        ],
-                      );
-                    }
-                  },
+                return ProfileScreen(
+                  providers: const [],
+                  actions: [
+                    SignedOutAction((context) {
+                      context.pushReplacement('/');
+                      // appState.currentIndex = 0;
+                      //change current index
+                    }),
+                  ],
                 );
               },
             ),

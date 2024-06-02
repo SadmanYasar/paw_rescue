@@ -181,12 +181,13 @@ class ScaffoldWithNavBar extends StatelessWidget {
 
   void authenticatedRouteGenerate(
       BuildContext context, String route, int index) {
-    final state = context.read<ApplicationState>();
-    if (state.loggedIn == false) {
+    if (Provider.of<ApplicationState>(context, listen: false).loggedIn ==
+        false) {
       GoRouter.of(context).replace('/sign-in');
     } else {
       GoRouter.of(context).replace(route);
-      context.read<ApplicationState>().currentIndex = index;
+      Provider.of<ApplicationState>(context, listen: false).currentIndex =
+          index;
     }
   }
 }

@@ -75,7 +75,7 @@ class _EditAdoptionScreenState extends State<EditAdoptionScreen> {
                     status: _statusController.text,
                     application: widget.adoption.application,
                   ),
-                );
+                ).then((value) => Navigator.pop(context));
               },
               child: const Text('Update'),
             ),

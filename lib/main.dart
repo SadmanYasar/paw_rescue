@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:paw_rescue/firebase_options.dart';
 import 'package:paw_rescue/services/adoption_data_service.dart';
 import 'package:paw_rescue/services/animal_data_service.dart';
+import 'package:paw_rescue/services/medicine_data_service.dart';
 import 'package:provider/provider.dart'; // new
 import 'package:paw_rescue/screens/router.dart'; // new
 import 'services/reports_data_service.dart';
@@ -39,6 +40,9 @@ void main() async {
         ),
         ChangeNotifierProvider(
           create: (context) => AdoptionService(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => MedicineService(),
         ),
       ],
       child: App(

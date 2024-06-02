@@ -12,11 +12,13 @@ class AdoptionService extends ChangeNotifier {
     try {
       final docRef = db.collection('adoptions').doc();
       Adoption newAdoption = Adoption(
-          userName: adoption!.userName,
-          animalName: adoption.animalName,
-          status: adoption.status,
-          phone: adoption.phone,
-          application: adoption.application);
+        userName: adoption!.userName,
+        animalName: adoption.animalName,
+        status: adoption.status,
+        phone: adoption.phone,
+        application: adoption.application,
+        id: docRef.id,
+      );
 
       await docRef.set(newAdoption.toJson());
       adoptions.add(newAdoption);
@@ -49,11 +51,11 @@ class AdoptionService extends ChangeNotifier {
   }
 
   // Read adoptions by user ID
-  Future<void> getAdoptionsByUserId({String? userId}) async {
+  Future<void> getAdoptionsByUserId({String? userName}) async {
     try {
       final adoptionCollection = await db
           .collection('adoptions')
-          .where('userId', isEqualTo: userId)
+          .where('userName', isEqualTo: userName)
           .get();
       adoptions = adoptionCollection.docs
           .map((doc) => Adoption.fromJson(doc.data()))

@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:paw_rescue/widgets/widgets.dart';
 import 'package:provider/provider.dart';
 import '../models/adoption_model.dart';
 import '../services/adoption_data_service.dart';
@@ -38,7 +39,8 @@ class _AdoptionPageState extends State<AdoptionPage> {
 
   Future<void> _getAdoptionsByUserId() {
     return Provider.of<AdoptionService>(context, listen: false)
-        .getAdoptionsByUserId(userId: FirebaseAuth.instance.currentUser!.uid);
+        .getAdoptionsByUserId(
+            userName: FirebaseAuth.instance.currentUser!.displayName);
   }
 
   Future<void> _deleteAdoption(Adoption adoption) {
@@ -69,67 +71,62 @@ class _AdoptionPageState extends State<AdoptionPage> {
                 itemCount: adoptionService.adoptions.length,
                 itemBuilder: (context, index) {
                   final adoption = adoptionService.adoptions[index];
-                  return GestureDetector(
-                    onTap: () {
-                      showDialog(
-                        context: context,
-                        builder: (context) {
-                          return AlertDialog(
-                            title: const Text(
-                                'Adoption Application'), // Add the 'const' keyword
-                            content: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text('Application: ${adoption.application}'),
-                                Text('Phone Number: ${adoption.phone}'),
-                              ],
-                            ),
-                            actions: [
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.pop(context);
-                                },
-                                child: const Text(
-                                    'Close'), // Add the 'const' keyword
-                              ),
-                            ],
-                          );
-                        },
-                      );
-                    },
-                    child: Card(
-                      child: ListTile(
-                        title: Text(adoption.animalName),
-                        subtitle: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text('Username: ${adoption.userName}'),
-                            Text('Status: ${adoption.status}'),
-                          ],
-                        ),
-                        trailing: Provider.of<ApplicationState>(context,
-                                    listen: false)
-                                .isRescuer
-                            ? Row(
+                  return Card(
+                    child: ListTile(
+                      leading: Image.asset('assets/logo.png'),
+                      title: Text(adoption.animalName),
+                      subtitle: Text(adoption.userName),
+                      onTap: () {
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              title: const Text('Application Details'),
+                              content: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
-                                  IconButton(
-                                    icon: const Icon(Icons.edit),
-                                    onPressed: () {
-                                      //go to edit-adoption with the adoption object as extra
-                                      context.pushNamed('edit-adoption',
-                                          extra: adoption);
-                                    },
-                                  ),
-                                  IconButton(
-                                    icon: const Icon(Icons.delete),
-                                    onPressed: () {
-                                      _deleteAdoption(adoption);
-                                    },
-                                  ),
+                                  Text('Phone: ${adoption.phone}'),
+                                  Text('Status: ${adoption.status}'),
+                                  Text('Application: ${adoption.application}'),
                                 ],
-                              )
-                            : Container(),
+                              ),
+                              actions: [
+                                StyledButton(
+                                  child: const Text('Close'),
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      },
+                      trailing: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          if (Provider.of<ApplicationState>(context,
+                                  listen: false)
+                              .isRescuer) ...[
+                            IconButton(
+                              icon: const Icon(Icons.edit),
+                              onPressed: () {
+                                //route to edit_adoption
+                                context.pushNamed(
+                                  'edit-adoption',
+                                  extra: adoption,
+                                );
+                              },
+                            ),
+                            IconButton(
+                              icon: const Icon(Icons.delete),
+                              onPressed: () {
+                                _deleteAdoption(adoption);
+                              },
+                            ),
+                          ]
+                        ],
                       ),
                     ),
                   );
