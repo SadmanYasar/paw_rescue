@@ -1,12 +1,14 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
 import 'package:paw_rescue/widgets/widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../models/adoption_model.dart';
 import '../services/adoption_data_service.dart';
 import '../widgets/app_state.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 /* 
 ==============================================
@@ -55,7 +57,7 @@ class _AdoptionPageState extends State<AdoptionPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Adoptions'),
+        title: const Text('Adoption Applications'),
       ),
       body: Consumer<AdoptionService>(
         builder: (context, adoptionService, _) {
@@ -70,102 +72,171 @@ class _AdoptionPageState extends State<AdoptionPage> {
                 child: Text('No adoptions found'),
               );
             } else {
-              return ListView.builder(
-                itemCount: adoptionService.adoptions.length,
-                itemBuilder: (context, index) {
-                  final adoption = adoptionService.adoptions[index];
-                  return Card(
-                    child: ListTile(
-                      leading: Image.asset('assets/logo.png'),
-                      title: Text(adoption.animalName),
-                      subtitle: Text(adoption.userName),
-                      onTap: () {
-                        showDialog(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return Theme(
-                              data: Theme.of(context).copyWith(
-                                dialogBackgroundColor: Colors.white,
+              return Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Card(
+                          child: Padding(
+                            padding: const EdgeInsets.only(
+                                left: 8.0, right: 8.0, top: 8.0, bottom: 8.0),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text(
+                                    'Adoptions in ${DateFormat('MMMM').format(DateTime.now())}',
+                                    style: const TextStyle(fontSize: 16)),
+                                const SizedBox(height: 4),
+                                Text('${adoptionService.monthlyAdoptions}',
+                                    style: const TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold)),
+                              ],
+                            ),
+                          ),
+                        ),
+                        Card(
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                const Text('Total Applications',
+                                    style: TextStyle(fontSize: 16)),
+                                const SizedBox(height: 4),
+                                Text('${adoptionService.adoptions.length}',
+                                    style: const TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold)),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Expanded(
+                    child: ListView.builder(
+                      itemCount: adoptionService.adoptions.length,
+                      itemBuilder: (context, index) {
+                        final adoption = adoptionService.adoptions[index];
+                        return Card(
+                          child: ListTile(
+                            leading: Image.asset('assets/logo.png'),
+                            title: Padding(
+                              padding: const EdgeInsets.only(bottom: 6.0),
+                              child: Text(
+                                '${adoption.animalName} - ${adoption.status}',
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.bold),
                               ),
-                              child: AlertDialog(
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(20.0)),
-                                title: const Text(
-                                  'Application Details',
-                                  style: TextStyle(
-                                    fontSize: 24,
-                                    fontWeight: FontWeight.bold,
-                                    height: 1.5, // Adjust line height for title
-                                  ),
-                                ),
-                                content: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Text('Phone: ${adoption.phone}',
-                                        style: const TextStyle(
-                                            fontSize: 18, height: 1.5)),
-                                    Text('Status: ${adoption.status}',
-                                        style: const TextStyle(
-                                            fontSize: 18, height: 1.5)),
-                                    Text('Application: ${adoption.application}',
-                                        style: const TextStyle(
-                                            fontSize: 18, height: 1.5)),
-                                  ],
-                                ),
-                                actions: [
-                                  StyledButton(
-                                    child: const Text('Call',
+                            ),
+                            subtitle: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                    'Applied ${timeago.format(adoption.time)}'),
+                                Text('By ${adoption.userName}'),
+                              ],
+                            ),
+                            onTap: () {
+                              showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return Theme(
+                                    data: Theme.of(context).copyWith(
+                                      dialogBackgroundColor: Colors.white,
+                                    ),
+                                    child: AlertDialog(
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(20.0)),
+                                      title: const Text(
+                                        'Application Details',
                                         style: TextStyle(
-                                            fontSize: 18, height: 1.5)),
+                                          fontSize: 24,
+                                          fontWeight: FontWeight.bold,
+                                          height:
+                                              1.5, // Adjust line height for title
+                                        ),
+                                      ),
+                                      content: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Text('Phone: ${adoption.phone}',
+                                              style: const TextStyle(
+                                                  fontSize: 18, height: 1.5)),
+                                          Text('Status: ${adoption.status}',
+                                              style: const TextStyle(
+                                                  fontSize: 18, height: 1.5)),
+                                          Text(
+                                              'Application: ${adoption.application}',
+                                              style: const TextStyle(
+                                                  fontSize: 18, height: 1.5)),
+                                        ],
+                                      ),
+                                      actions: [
+                                        StyledButton(
+                                          child: const Text('Call',
+                                              style: TextStyle(
+                                                  fontSize: 18, height: 1.5)),
+                                          onPressed: () {
+                                            Uri url = Uri(
+                                                scheme: 'tel',
+                                                path: adoption.phone);
+                                            launchUrl(url);
+                                          },
+                                        ),
+                                        StyledButton(
+                                          child: const Text('Close',
+                                              style: TextStyle(
+                                                  fontSize: 18, height: 1.5)),
+                                          onPressed: () {
+                                            Navigator.of(context).pop();
+                                          },
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                },
+                              );
+                            },
+                            trailing: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                if (Provider.of<ApplicationState>(context,
+                                        listen: false)
+                                    .isRescuer) ...[
+                                  IconButton(
+                                    icon: const Icon(Icons.edit),
                                     onPressed: () {
-                                      Uri url = Uri(
-                                          scheme: 'tel', path: adoption.phone);
-                                      launchUrl(url);
+                                      //route to edit_adoption
+                                      context.pushNamed(
+                                        'edit-adoption',
+                                        extra: adoption,
+                                      );
                                     },
                                   ),
-                                  StyledButton(
-                                    child: const Text('Close',
-                                        style: TextStyle(
-                                            fontSize: 18, height: 1.5)),
+                                  IconButton(
+                                    icon: const Icon(Icons.delete),
                                     onPressed: () {
-                                      Navigator.of(context).pop();
+                                      _deleteAdoption(adoption);
                                     },
                                   ),
-                                ],
-                              ),
-                            );
-                          },
+                                ]
+                              ],
+                            ),
+                          ),
                         );
                       },
-                      trailing: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          if (Provider.of<ApplicationState>(context,
-                                  listen: false)
-                              .isRescuer) ...[
-                            IconButton(
-                              icon: const Icon(Icons.edit),
-                              onPressed: () {
-                                //route to edit_adoption
-                                context.pushNamed(
-                                  'edit-adoption',
-                                  extra: adoption,
-                                );
-                              },
-                            ),
-                            IconButton(
-                              icon: const Icon(Icons.delete),
-                              onPressed: () {
-                                _deleteAdoption(adoption);
-                              },
-                            ),
-                          ]
-                        ],
-                      ),
                     ),
-                  );
-                },
+                  ),
+                ],
               );
             }
           }

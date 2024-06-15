@@ -67,15 +67,17 @@ class _EditAdoptionScreenState extends State<EditAdoptionScreen> {
               onPressed: () {
                 Provider.of<AdoptionService>(context, listen: false)
                     .updateAdoption(
-                  adoption: Adoption(
-                    id: widget.adoption.id,
-                    userName: _usernameController.text,
-                    animalName: _animalnameController.text,
-                    phone: _phoneController.text,
-                    status: _statusController.text,
-                    application: widget.adoption.application,
-                  ),
-                ).then((value) => Navigator.pop(context));
+                      adoption: Adoption(
+                        id: widget.adoption.id,
+                        userName: _usernameController.text,
+                        animalName: _animalnameController.text,
+                        phone: _phoneController.text,
+                        status: _statusController.text,
+                        application: widget.adoption.application,
+                        time: widget.adoption.time,
+                      ),
+                    )
+                    .then((value) => Navigator.pop(context));
               },
               child: const Text('Update'),
             ),

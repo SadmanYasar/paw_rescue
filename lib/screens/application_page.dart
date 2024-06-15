@@ -31,6 +31,7 @@ class _ApplicationScreenState extends State<ApplicationScreen> {
         status: 'Pending',
         phone: _phoneController.text,
         application: _reasonController.text,
+        time: DateTime.now(),
       ),
     );
     //show a snackbar

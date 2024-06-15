@@ -18,11 +18,19 @@ class AdoptionService extends ChangeNotifier {
         status: adoption.status,
         phone: adoption.phone,
         application: adoption.application,
+        time: adoption.time,
         id: docRef.id,
       );
 
       await docRef.set(newAdoption.toJson());
       adoptions.add(newAdoption);
+
+      monthlyAdoptions = adoptions
+          .where((element) => element.status == 'Approved')
+          .where((element) =>
+              element.time.isAfter(DateTime.now().subtract(Duration(days: 30))))
+          .toList()
+          .length;
 
       isLoading = false;
       notifyListeners();
@@ -42,6 +50,13 @@ class AdoptionService extends ChangeNotifier {
       adoptions = adoptionCollection.docs
           .map((doc) => Adoption.fromJson(doc.data()))
           .toList();
+
+      monthlyAdoptions = adoptions
+          .where((element) => element.status == 'Approved')
+          .where((element) =>
+              element.time.isAfter(DateTime.now().subtract(Duration(days: 30))))
+          .toList()
+          .length;
 
       isLoading = false;
       notifyListeners();
@@ -66,6 +81,13 @@ class AdoptionService extends ChangeNotifier {
           .map((doc) => Adoption.fromJson(doc.data()))
           .toList();
 
+      monthlyAdoptions = adoptions
+          .where((element) => element.status == 'Approved')
+          .where((element) =>
+              element.time.isAfter(DateTime.now().subtract(Duration(days: 30))))
+          .toList()
+          .length;
+
       isLoading = false;
       notifyListeners();
     } on Exception catch (e) {
@@ -86,6 +108,13 @@ class AdoptionService extends ChangeNotifier {
           adoptions.indexWhere((element) => element.id == adoption.id);
       adoptions[index] = adoption;
 
+      monthlyAdoptions = adoptions
+          .where((element) => element.status == 'Approved')
+          .where((element) =>
+              element.time.isAfter(DateTime.now().subtract(Duration(days: 30))))
+          .toList()
+          .length;
+
       isLoading = false;
       notifyListeners();
     } on Exception catch (e) {
@@ -101,30 +130,19 @@ class AdoptionService extends ChangeNotifier {
       await db.collection('adoptions').doc(id).delete();
       adoptions.removeWhere((element) => element.id == id);
 
+      monthlyAdoptions = adoptions
+          .where((element) => element.status == 'Approved')
+          .where((element) =>
+              element.time.isAfter(DateTime.now().subtract(Duration(days: 30))))
+          .toList()
+          .length;
+
       isLoading = false;
       notifyListeners();
     } on Exception catch (e) {
       isLoading = false;
       notifyListeners();
       throw Exception('Failed to delete adoption: $e');
-    }
-  }
-
-  //get total adoptions where status is "Approved"
-  Future<void> getTotalAdoptions() async {
-    try {
-      final adoptionCollection = await db
-          .collection('adoptions')
-          .where('status', isEqualTo: 'Approved')
-          .get();
-      monthlyAdoptions = adoptionCollection.docs.length;
-
-      isLoading = false;
-      notifyListeners();
-    } on Exception catch (e) {
-      isLoading = false;
-      notifyListeners();
-      throw Exception('Failed to read adoptions: $e');
     }
   }
 }

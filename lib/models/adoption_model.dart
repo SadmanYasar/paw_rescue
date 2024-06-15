@@ -1,9 +1,12 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class Adoption {
   final String userName;
   final String animalName;
   final String status;
   final String application;
   final String phone;
+  final DateTime time;
   final String? id;
 
   Adoption({
@@ -12,6 +15,7 @@ class Adoption {
     required this.status,
     required this.application,
     required this.phone,
+    required this.time,
     this.id,
   });
 
@@ -22,6 +26,7 @@ class Adoption {
         status: json['status'] ?? '',
         application: json['application'] ?? '',
         phone: json['phone'] ?? '',
+        time: (json['time']).toDate() ?? DateTime.now(),
         id: json['id']);
   }
 
@@ -32,6 +37,7 @@ class Adoption {
       'status': status,
       'application': application,
       'phone': phone,
+      'time': Timestamp.fromDate(time),
       'id': id
     };
   }

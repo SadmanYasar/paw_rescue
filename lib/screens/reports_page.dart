@@ -122,7 +122,7 @@ class _ReportsPageState extends State<ReportsPage> {
                         child: ListTile(
                           leading: Image.asset('assets/logo.png'),
                           title: Text(
-                              '${report.name} | ${timeago.format(report.time, locale: 'en_short')}'),
+                              '${report.name} • ${timeago.format(report.time, locale: 'en_short')}'),
                           subtitle: Text(report.address),
                           onTap: () {
                             showDialog(

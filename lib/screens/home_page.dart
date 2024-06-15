@@ -117,14 +117,18 @@ class _HomePageState extends State<HomePage> {
                                     Padding(
                                       padding: const EdgeInsets.all(8.0),
                                       child: Text(
-                                        '${animal.name} ⦿ ${animal.age}',
+                                        '${animal.name} • ${animal.age}',
                                         style: const TextStyle(
+                                            fontSize: 20,
                                             fontWeight: FontWeight.bold),
                                       ),
                                     ),
                                     Padding(
                                       padding: const EdgeInsets.all(8.0),
-                                      child: Text(animal.breed),
+                                      child: Text(
+                                        animal.breed,
+                                        style: TextStyle(fontSize: 16),
+                                      ),
                                     ),
                                   ],
                                 ),
