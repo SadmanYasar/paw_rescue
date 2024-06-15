@@ -22,6 +22,7 @@ class ReportService extends ChangeNotifier {
           address: report.address,
           userId: report.userId,
           phone: report.phone,
+          rescued: report.rescued,
           id: docRef.id);
 
       await docRef.set(newReport.toJson());
@@ -113,4 +114,6 @@ class ReportService extends ChangeNotifier {
       throw Exception('Failed to delete report: $e');
     }
   }
+
+  // Future getMonthlyRescues()
 }

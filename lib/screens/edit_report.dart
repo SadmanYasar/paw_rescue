@@ -21,6 +21,7 @@ class _EditReportScreenState extends State<EditReportScreen> {
   final _timeController = TextEditingController();
   final _addressController = TextEditingController();
   final _phoneController = TextEditingController();
+  final _rescuedController = TextEditingController();
 
   @override
   void initState() {
@@ -31,6 +32,7 @@ class _EditReportScreenState extends State<EditReportScreen> {
       _timeController.text = widget.report!.time.toString();
       _addressController.text = widget.report!.address;
       _phoneController.text = widget.report!.phone;
+      _rescuedController.text = widget.report!.rescued;
     }
   }
 
@@ -76,58 +78,81 @@ class _EditReportScreenState extends State<EditReportScreen> {
                   },
                 ),
                 TextFormField(
-                  controller: _timeController,
-                  decoration: const InputDecoration(labelText: 'Time'),
-                  readOnly: true,
-                  validator: (value) {
-                    if (value!.isEmpty) {
-                      return 'Please enter a time';
-                    }
-                    return null;
-                  },
-                  onSaved: (value) {
-                    _timeController.text = value!;
-                  },
-                ),
-                ElevatedButton(
-                  style: ButtonStyle(
-                    //make it full width
-                    minimumSize: MaterialStateProperty.all<Size>(
-                      const Size(double.infinity, 50),
-                    ),
-                    //add padding to the button
-                    padding: MaterialStateProperty.all<EdgeInsets>(
-                      const EdgeInsets.all(16.0),
-                    ),
-                  ),
-                  onPressed: () {
-                    showDatePicker(
-                      context: context,
-                      initialDate: DateTime.now(),
-                      firstDate: DateTime(2000),
-                      lastDate: DateTime(2100),
-                    ).then((selectedDate) {
+                    controller: _timeController,
+                    decoration: const InputDecoration(labelText: 'Time'),
+                    readOnly: true,
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return 'Please enter a time';
+                      }
+                      return null;
+                    },
+                    onTap: () async {
+                      final selectedDate = await showDatePicker(
+                        context: context,
+                        initialDate: DateTime.now(),
+                        firstDate: DateTime(2000),
+                        lastDate: DateTime(2100),
+                      );
                       if (selectedDate != null) {
-                        showTimePicker(
+                        final selectedTime = await showTimePicker(
                           context: context,
                           initialTime: TimeOfDay.now(),
-                        ).then((selectedTime) {
-                          if (selectedTime != null) {
-                            final dateTime = DateTime(
-                              selectedDate.year,
-                              selectedDate.month,
-                              selectedDate.day,
-                              selectedTime.hour,
-                              selectedTime.minute,
-                            );
-                            _timeController.text = dateTime.toString();
-                          }
-                        });
+                        );
+                        if (selectedTime != null) {
+                          final dateTime = DateTime(
+                            selectedDate.year,
+                            selectedDate.month,
+                            selectedDate.day,
+                            selectedTime.hour,
+                            selectedTime.minute,
+                          );
+                          //format dateTime to make it displayable in YYYY-MM-DD HH:MM format
+                          String formattedDateTime =
+                              '${dateTime.year}-${dateTime.month.toString().padLeft(2, '0')}-${dateTime.day.toString().padLeft(2, '0')} ${dateTime.hour.toString().padLeft(2, '0')}:${dateTime.minute.toString().padLeft(2, '0')}';
+                          _timeController.text = formattedDateTime;
+                        }
                       }
-                    });
-                  },
-                  child: const Text('Select Time'),
-                ),
+                    }),
+                // ElevatedButton(
+                //   style: ButtonStyle(
+                //     //make it full width
+                //     minimumSize: MaterialStateProperty.all<Size>(
+                //       const Size(double.infinity, 50),
+                //     ),
+                //     //add padding to the button
+                //     padding: MaterialStateProperty.all<EdgeInsets>(
+                //       const EdgeInsets.all(16.0),
+                //     ),
+                //   ),
+                //   onPressed: () {
+                //     showDatePicker(
+                //       context: context,
+                //       initialDate: DateTime.now(),
+                //       firstDate: DateTime(2000),
+                //       lastDate: DateTime(2100),
+                //     ).then((selectedDate) {
+                //       if (selectedDate != null) {
+                //         showTimePicker(
+                //           context: context,
+                //           initialTime: TimeOfDay.now(),
+                //         ).then((selectedTime) {
+                //           if (selectedTime != null) {
+                //             final dateTime = DateTime(
+                //               selectedDate.year,
+                //               selectedDate.month,
+                //               selectedDate.day,
+                //               selectedTime.hour,
+                //               selectedTime.minute,
+                //             );
+                //             _timeController.text = dateTime.toString();
+                //           }
+                //         });
+                //       }
+                //     });
+                //   },
+                //   child: const Text('Select Time'),
+                // ),
                 TextFormField(
                   controller: _addressController,
                   decoration: const InputDecoration(labelText: 'Address'),
@@ -154,6 +179,21 @@ class _EditReportScreenState extends State<EditReportScreen> {
                     _phoneController.text = value!;
                   },
                 ),
+                if (widget.report != null)
+                  TextFormField(
+                    controller: _rescuedController,
+                    decoration: const InputDecoration(
+                        labelText: 'Rescued? (true/false)'),
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return 'Please enter a rescued';
+                      }
+                      return null;
+                    },
+                    onSaved: (value) {
+                      _rescuedController.text = value!;
+                    },
+                  ),
                 const SizedBox(height: 16.0),
                 ElevatedButton(
                   style: ButtonStyle(
@@ -176,6 +216,7 @@ class _EditReportScreenState extends State<EditReportScreen> {
                         address: _addressController.text,
                         phone: _phoneController.text,
                         userId: FirebaseAuth.instance.currentUser!.uid,
+                        rescued: _rescuedController.text,
                         id: widget.report?.id,
                       );
                       if (widget.report == null) {

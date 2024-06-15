@@ -4,9 +4,10 @@ import 'package:go_router/go_router.dart';
 import 'package:paw_rescue/widgets/app_state.dart';
 import 'package:paw_rescue/widgets/widgets.dart';
 import 'package:provider/provider.dart';
-
+import 'package:timeago/timeago.dart' as timeago;
 import '../models/report_model.dart';
 import '../services/reports_data_service.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ReportsPage extends StatefulWidget {
   const ReportsPage({super.key});
@@ -74,27 +75,78 @@ class _ReportsPageState extends State<ReportsPage> {
                       showDialog(
                         context: context,
                         builder: (BuildContext context) {
-                          return AlertDialog(
-                            title: const Text('Report Details'),
-                            content: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Text('Name: ${report.name}'),
-                                Text('Description: ${report.description}'),
-                                Text('Time: ${report.time.toString()}'),
-                                Text('Address: ${report.address}'),
-                                Text('Phone: ${report.phone}'),
+                          return Theme(
+                            data: Theme.of(context)
+                                .copyWith(dialogBackgroundColor: Colors.white),
+                            child: AlertDialog(
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(
+                                      20.0)), // Making it look more like a card
+                              title: const Text(
+                                'Report Details',
+                                style: TextStyle(
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.bold,
+                                  height: 1.5, // Adjust line height for title
+                                ),
+                              ),
+                              content: SingleChildScrollView(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Text('Name: ${report.name}',
+                                        style: const TextStyle(
+                                            fontSize: 18,
+                                            height:
+                                                1.5)), // IncreaseDd font size and line height
+                                    const SizedBox(
+                                        height: 8), // Adds vertical spacing
+                                    Text('Description: ${report.description}',
+                                        style: const TextStyle(
+                                            fontSize: 18, height: 1.5)),
+                                    const SizedBox(height: 8),
+                                    Text(
+                                        'Posted: ${timeago.format(report.time)}',
+                                        style: const TextStyle(
+                                            fontSize: 18, height: 1.5)),
+                                    const SizedBox(height: 8),
+                                    Text('Address: ${report.address}',
+                                        style: const TextStyle(
+                                            fontSize: 18, height: 1.5)),
+                                    const SizedBox(height: 8),
+                                    Text('Phone: ${report.phone}',
+                                        style: const TextStyle(
+                                            fontSize: 18, height: 1.5)),
+                                    const SizedBox(height: 8),
+                                    Text('Rescued: ${report.rescued}',
+                                        style: const TextStyle(
+                                            fontSize: 18, height: 1.5))
+                                  ],
+                                ),
+                              ),
+                              actions: [
+                                // a button than open phone call app with the phone number dialed
+                                StyledButton(
+                                  child: const Text('Call',
+                                      style:
+                                          TextStyle(fontSize: 18, height: 1.5)),
+                                  onPressed: () {
+                                    Uri url =
+                                        Uri(scheme: 'tel', path: report.phone);
+                                    launchUrl(url);
+                                  },
+                                ),
+                                StyledButton(
+                                  child: const Text('Close',
+                                      style:
+                                          TextStyle(fontSize: 18, height: 1.5)),
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                ),
                               ],
                             ),
-                            actions: [
-                              StyledButton(
-                                child: const Text('Close'),
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                },
-                              ),
-                            ],
                           );
                         },
                       );

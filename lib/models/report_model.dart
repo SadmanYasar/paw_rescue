@@ -7,6 +7,7 @@ class Report {
   final String address;
   final String userId;
   final String phone;
+  final String rescued;
   final String? id;
 
   Report(
@@ -16,6 +17,7 @@ class Report {
       required this.address,
       required this.userId,
       required this.phone,
+      required this.rescued,
       required this.id});
 
   factory Report.fromJson(Map<String, dynamic> json) {
@@ -26,6 +28,7 @@ class Report {
         address: json['address'] ?? '',
         userId: json['userId'] ?? '',
         phone: json['phone'] ?? '',
+        rescued: json['rescued'] ?? 'false',
         id: json['id']);
   }
 
@@ -37,6 +40,7 @@ class Report {
       'address': address,
       'userId': userId,
       'phone': phone,
+      'rescued': rescued,
       'id': id
     };
   }
