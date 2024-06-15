@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:paw_rescue/widgets/widgets.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../models/adoption_model.dart';
 import '../services/adoption_data_service.dart';
 import '../widgets/app_state.dart';
@@ -80,25 +81,57 @@ class _AdoptionPageState extends State<AdoptionPage> {
                         showDialog(
                           context: context,
                           builder: (BuildContext context) {
-                            return AlertDialog(
-                              title: const Text('Application Details'),
-                              content: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Text('Phone: ${adoption.phone}'),
-                                  Text('Status: ${adoption.status}'),
-                                  Text('Application: ${adoption.application}'),
+                            return Theme(
+                              data: Theme.of(context).copyWith(
+                                dialogBackgroundColor: Colors.white,
+                              ),
+                              child: AlertDialog(
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(20.0)),
+                                title: const Text(
+                                  'Application Details',
+                                  style: TextStyle(
+                                    fontSize: 24,
+                                    fontWeight: FontWeight.bold,
+                                    height: 1.5, // Adjust line height for title
+                                  ),
+                                ),
+                                content: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Text('Phone: ${adoption.phone}',
+                                        style: const TextStyle(
+                                            fontSize: 18, height: 1.5)),
+                                    Text('Status: ${adoption.status}',
+                                        style: const TextStyle(
+                                            fontSize: 18, height: 1.5)),
+                                    Text('Application: ${adoption.application}',
+                                        style: const TextStyle(
+                                            fontSize: 18, height: 1.5)),
+                                  ],
+                                ),
+                                actions: [
+                                  StyledButton(
+                                    child: const Text('Call',
+                                        style: TextStyle(
+                                            fontSize: 18, height: 1.5)),
+                                    onPressed: () {
+                                      Uri url = Uri(
+                                          scheme: 'tel', path: adoption.phone);
+                                      launchUrl(url);
+                                    },
+                                  ),
+                                  StyledButton(
+                                    child: const Text('Close',
+                                        style: TextStyle(
+                                            fontSize: 18, height: 1.5)),
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                  ),
                                 ],
                               ),
-                              actions: [
-                                StyledButton(
-                                  child: const Text('Close'),
-                                  onPressed: () {
-                                    Navigator.of(context).pop();
-                                  },
-                                ),
-                              ],
                             );
                           },
                         );
