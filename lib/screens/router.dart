@@ -95,17 +95,7 @@ final router = GoRouter(
             GoRoute(
               path: 'reports',
               builder: (context, state) {
-                return Consumer<ApplicationState>(
-                  builder: (context, appState, child) {
-                    if (appState.isLoading) {
-                      return const Center(
-                        child: CircularProgressIndicator(),
-                      );
-                    } else {
-                      return const ReportsPage();
-                    }
-                  },
-                );
+                return ReportsPage();
               },
             ),
             GoRoute(
@@ -113,18 +103,8 @@ final router = GoRouter(
               name: 'edit-report',
               builder: (context, state) {
                 Report? report = state.extra as Report?;
-                return Consumer<ApplicationState>(
-                  builder: (context, appState, child) {
-                    if (appState.isLoading) {
-                      return const Center(
-                        child: CircularProgressIndicator(),
-                      );
-                    } else {
-                      return EditReportScreen(
-                        report: report,
-                      );
-                    }
-                  },
+                return EditReportScreen(
+                  report: report,
                 );
               },
             ),

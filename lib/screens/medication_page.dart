@@ -13,7 +13,7 @@ class _MedicationScreenState extends State<MedicationScreen> {
   @override
   void initState() {
     super.initState();
-    _getMedicines();
+    Future.microtask(() => _getMedicines());
   }
 
   Future<void> _getMedicines() {
@@ -29,19 +29,28 @@ class _MedicationScreenState extends State<MedicationScreen> {
       appBar: AppBar(
         title: const Text('Medications'),
       ),
-      body: ListView.builder(
-          itemCount: medicines.length,
-          itemBuilder: (context, index) {
-            final medicine = medicines[index];
-
-            return Card(
-              child: ListTile(
-                title: Text(medicine.name),
-                subtitle: Text(medicine.description),
-                trailing: Text('\$${medicine.price.toStringAsFixed(2)}'),
-              ),
+      body: Consumer<MedicineService>(
+        builder: (context, medicineService, _) {
+          if (medicineService.isLoading && medicines.isEmpty) {
+            return const Center(
+              child: CircularProgressIndicator(),
             );
-          }),
+          }
+          return ListView.builder(
+              itemCount: medicines.length,
+              itemBuilder: (context, index) {
+                final medicine = medicines[index];
+
+                return Card(
+                  child: ListTile(
+                    title: Text(medicine.name),
+                    subtitle: Text(medicine.description),
+                    trailing: Text('\$${medicine.price.toStringAsFixed(2)}'),
+                  ),
+                );
+              });
+        },
+      ),
     );
   }
 }

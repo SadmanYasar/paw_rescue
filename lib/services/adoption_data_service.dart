@@ -6,6 +6,7 @@ class AdoptionService extends ChangeNotifier {
   final db = FirebaseFirestore.instance;
   List<Adoption> adoptions = [];
   bool isLoading = false;
+  int monthlyAdoptions = 0;
 
   // Create an adoption
   Future<void> createAdoption({Adoption? adoption}) async {
@@ -35,6 +36,8 @@ class AdoptionService extends ChangeNotifier {
   // Read all adoptions
   Future<void> getAdoptions() async {
     try {
+      isLoading = true;
+      notifyListeners();
       final adoptionCollection = await db.collection('adoptions').get();
       adoptions = adoptionCollection.docs
           .map((doc) => Adoption.fromJson(doc.data()))
@@ -53,6 +56,8 @@ class AdoptionService extends ChangeNotifier {
   // Read adoptions by user ID
   Future<void> getAdoptionsByUserId({String? userName}) async {
     try {
+      isLoading = true;
+      notifyListeners();
       final adoptionCollection = await db
           .collection('adoptions')
           .where('userName', isEqualTo: userName)
@@ -102,6 +107,24 @@ class AdoptionService extends ChangeNotifier {
       isLoading = false;
       notifyListeners();
       throw Exception('Failed to delete adoption: $e');
+    }
+  }
+
+  //get total adoptions where status is "Approved"
+  Future<void> getTotalAdoptions() async {
+    try {
+      final adoptionCollection = await db
+          .collection('adoptions')
+          .where('status', isEqualTo: 'Approved')
+          .get();
+      monthlyAdoptions = adoptionCollection.docs.length;
+
+      isLoading = false;
+      notifyListeners();
+    } on Exception catch (e) {
+      isLoading = false;
+      notifyListeners();
+      throw Exception('Failed to read adoptions: $e');
     }
   }
 }

@@ -16,7 +16,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    _getAnimals();
+    Future.microtask(() => _getAnimals());
   }
 
   Future<void> _getAnimals() {
@@ -76,7 +76,7 @@ class _HomePageState extends State<HomePage> {
           ),
           Consumer<AnimalService>(
             builder: (context, animalService, _) {
-              if (animalService.isLoading) {
+              if (animalService.isLoading && animalService.animals.isEmpty) {
                 // Show a loading circle
                 return const Center(
                   child: CircularProgressIndicator(),

@@ -26,12 +26,14 @@ class _AdoptionPageState extends State<AdoptionPage> {
   void initState() {
     super.initState();
     //if isRescuer show all reports
-    if (Provider.of<ApplicationState>(context, listen: false).isRescuer) {
-      _getAdoptions();
-    } else {
-      //if not rescuer show only user reports
-      _getAdoptionsByUserId();
-    }
+    Future.microtask(() {
+      if (Provider.of<ApplicationState>(context, listen: false).isRescuer) {
+        _getAdoptions();
+      } else {
+        //if not rescuer show only user reports
+        _getAdoptionsByUserId();
+      }
+    });
   }
 
   Future<void> _getAdoptions() {
@@ -57,7 +59,7 @@ class _AdoptionPageState extends State<AdoptionPage> {
       ),
       body: Consumer<AdoptionService>(
         builder: (context, adoptionService, _) {
-          if (adoptionService.isLoading) {
+          if (adoptionService.isLoading && adoptionService.adoptions.isEmpty) {
             // Show a loading circle
             return const Center(
               child: CircularProgressIndicator(),

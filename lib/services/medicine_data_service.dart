@@ -11,8 +11,8 @@ class MedicineService extends ChangeNotifier {
 
   Future<void> getMedicines() async {
     try {
-      // _isLoading = true;
-      // notifyListeners();
+      _isLoading = true;
+      notifyListeners();
 
       final response = await http
           .get(Uri.parse('https://sadmanyasar.github.io/medicines.json'));

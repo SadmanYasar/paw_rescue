@@ -42,6 +42,8 @@ class ReportService extends ChangeNotifier {
   //Read all reports
   Future<void> getReports() async {
     try {
+      _isLoading = true;
+      notifyListeners();
       final appointmentCollection = await db.collection('reports').get();
       reports = appointmentCollection.docs
           .map((doc) => Report.fromJson(doc.data()))
@@ -58,8 +60,8 @@ class ReportService extends ChangeNotifier {
 
   Future<void> getReportsByUserId({String? userId}) async {
     try {
-      // _isLoading = true;
-      // notifyListeners();
+      _isLoading = true;
+      notifyListeners();
 
       final appointmentCollection = await db
           .collection('reports')

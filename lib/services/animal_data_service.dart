@@ -39,25 +39,23 @@ class AnimalService extends ChangeNotifier {
 
   // Read all animals
   Future<void> getAnimals() async {
-    Future.microtask(() async {
-      try {
-        _isLoading = true;
-        notifyListeners();
+    try {
+      _isLoading = true;
+      notifyListeners();
 
-        final animalCollection = await db.collection('animals').get();
-        animals = animalCollection.docs
-            .map((doc) => Animal.fromJson(doc.data()))
-            .toList();
+      final animalCollection = await db.collection('animals').get();
+      animals = animalCollection.docs
+          .map((doc) => Animal.fromJson(doc.data()))
+          .toList();
 
-        _isLoading = false;
-        notifyListeners();
-      } catch (e) {
-        _isLoading = false;
-        notifyListeners();
-        print(e.toString());
-        throw Exception('Failed to get animals: $e');
-      }
-    });
+      _isLoading = false;
+      notifyListeners();
+    } catch (e) {
+      _isLoading = false;
+      notifyListeners();
+      print(e.toString());
+      throw Exception('Failed to get animals: $e');
+    }
   }
 
   // Update animal

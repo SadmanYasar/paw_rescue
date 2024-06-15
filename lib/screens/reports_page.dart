@@ -21,26 +21,27 @@ class _ReportsPageState extends State<ReportsPage> {
   @override
   void initState() {
     super.initState();
-    //if isRescuer show all reports
-    if (Provider.of<ApplicationState>(context, listen: false).isRescuer) {
-      _getReports();
-      _getMonthlyRescues();
-    } else {
-      //if not rescuer show only user reports
-      _getReportsByUserId();
-    }
+    Future.microtask(() {
+      if (Provider.of<ApplicationState>(context, listen: false).isRescuer) {
+        _getReports();
+        _getMonthlyRescues();
+      } else {
+        //if not rescuer show only user reports
+        _getReportsByUserId();
+      }
+    });
   }
 
-  Future<void> _getReports() {
+  Future<void> _getReports() async {
     return Provider.of<ReportService>(context, listen: false).getReports();
   }
 
-  Future<void> _getMonthlyRescues() {
+  Future<void> _getMonthlyRescues() async {
     return Provider.of<ReportService>(context, listen: false)
         .getMonthlyRescues();
   }
 
-  Future<void> _getReportsByUserId() {
+  Future<void> _getReportsByUserId() async {
     return Provider.of<ReportService>(context, listen: false)
         .getReportsByUserId(userId: FirebaseAuth.instance.currentUser!.uid);
   }
@@ -58,11 +59,11 @@ class _ReportsPageState extends State<ReportsPage> {
       ),
       body: Consumer<ReportService>(
         builder: (context, reportService, _) {
-          if (reportService.isLoading) {
+          if (reportService.isLoading && reportService.reports.isEmpty) {
             // Show a loading circle
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
+            return const Center(child: CircularProgressIndicator()
+                // child: Text('Loading'));
+                );
           } else {
             if (reportService.reports.isEmpty) {
               return const Center(
