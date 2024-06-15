@@ -29,6 +29,13 @@ class ReportService extends ChangeNotifier {
       await docRef.set(newReport.toJson());
       reports.add(newReport);
 
+      monthlyRescues = reports
+          .where((element) => element.rescued == 'true')
+          .where((element) =>
+              element.time.isAfter(DateTime.now().subtract(Duration(days: 30))))
+          .toList()
+          .length;
+
       _isLoading = false;
       notifyListeners();
     } on Exception catch (e) {
@@ -48,6 +55,13 @@ class ReportService extends ChangeNotifier {
       reports = appointmentCollection.docs
           .map((doc) => Report.fromJson(doc.data()))
           .toList();
+
+      monthlyRescues = reports
+          .where((element) => element.rescued == 'true')
+          .where((element) =>
+              element.time.isAfter(DateTime.now().subtract(Duration(days: 30))))
+          .toList()
+          .length;
 
       _isLoading = false;
       notifyListeners();
@@ -71,6 +85,13 @@ class ReportService extends ChangeNotifier {
           .map((doc) => Report.fromJson(doc.data()))
           .toList();
 
+      monthlyRescues = reports
+          .where((element) => element.rescued == 'true')
+          .where((element) =>
+              element.time.isAfter(DateTime.now().subtract(Duration(days: 30))))
+          .toList()
+          .length;
+
       _isLoading = false;
       notifyListeners();
     } on Exception catch (e) {
@@ -90,6 +111,13 @@ class ReportService extends ChangeNotifier {
       final index = reports.indexWhere((element) => element.id == report.id);
       reports[index] = report;
 
+      monthlyRescues = reports
+          .where((element) => element.rescued == 'true')
+          .where((element) =>
+              element.time.isAfter(DateTime.now().subtract(Duration(days: 30))))
+          .toList()
+          .length;
+
       _isLoading = false;
       notifyListeners();
     } on Exception catch (e) {
@@ -108,6 +136,13 @@ class ReportService extends ChangeNotifier {
       await db.collection('reports').doc(id).delete();
       reports.removeWhere((element) => element.id == id);
 
+      monthlyRescues = reports
+          .where((element) => element.rescued == 'true')
+          .where((element) =>
+              element.time.isAfter(DateTime.now().subtract(Duration(days: 30))))
+          .toList()
+          .length;
+
       _isLoading = false;
       notifyListeners();
     } on Exception catch (e) {
@@ -115,27 +150,6 @@ class ReportService extends ChangeNotifier {
       notifyListeners();
       print(e.toString());
       throw Exception('Failed to delete report: $e');
-    }
-  }
-
-  Future<void> getMonthlyRescues() async {
-    try {
-      final reportsCollection = await db.collection('reports').get();
-      reports = reportsCollection.docs
-          .map((doc) => Report.fromJson(doc.data()))
-          .toList();
-
-      final monthlyRescues = reports
-          .where((element) => element.rescued == 'true')
-          .where((element) =>
-              element.time.isAfter(DateTime.now().subtract(Duration(days: 30))))
-          .toList();
-
-      this.monthlyRescues = monthlyRescues.length;
-
-      notifyListeners();
-    } on Exception catch (e) {
-      throw Exception('Failed to get monthly rescues: $e');
     }
   }
 }

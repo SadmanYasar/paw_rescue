@@ -216,7 +216,7 @@ class _EditReportScreenState extends State<EditReportScreen> {
                         address: _addressController.text,
                         phone: _phoneController.text,
                         userId: FirebaseAuth.instance.currentUser!.uid,
-                        rescued: _rescuedController.text,
+                        rescued: _rescuedController.text ?? 'false',
                         id: widget.report?.id,
                       );
                       if (widget.report == null) {

@@ -21,27 +21,24 @@ class _ReportsPageState extends State<ReportsPage> {
   @override
   void initState() {
     super.initState();
-    Future.microtask(() {
-      if (Provider.of<ApplicationState>(context, listen: false).isRescuer) {
-        _getReports();
-        _getMonthlyRescues();
-      } else {
-        //if not rescuer show only user reports
-        _getReportsByUserId();
-      }
-    });
+    print(Provider.of<ApplicationState>(context, listen: false).isRescuer);
+
+    if (Provider.of<ApplicationState>(context, listen: false).isRescuer) {
+      print(Provider.of<ApplicationState>(context, listen: false).isRescuer);
+      Future.microtask(() => _getReports());
+      // _getReports();
+    } else {
+      //if not rescuer show only user reports
+      Future.microtask(() => _getReportsByUserId());
+      // _getReportsByUserId();
+    }
   }
 
-  Future<void> _getReports() async {
+  Future<void> _getReports() {
     return Provider.of<ReportService>(context, listen: false).getReports();
   }
 
-  Future<void> _getMonthlyRescues() async {
-    return Provider.of<ReportService>(context, listen: false)
-        .getMonthlyRescues();
-  }
-
-  Future<void> _getReportsByUserId() async {
+  Future<void> _getReportsByUserId() {
     return Provider.of<ReportService>(context, listen: false)
         .getReportsByUserId(userId: FirebaseAuth.instance.currentUser!.uid);
   }
@@ -59,7 +56,7 @@ class _ReportsPageState extends State<ReportsPage> {
       ),
       body: Consumer<ReportService>(
         builder: (context, reportService, _) {
-          if (reportService.isLoading && reportService.reports.isEmpty) {
+          if (reportService.isLoading) {
             // Show a loading circle
             return const Center(child: CircularProgressIndicator()
                 // child: Text('Loading'));

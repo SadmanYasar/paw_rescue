@@ -31,18 +31,23 @@ void main() async {
       providers: [
         ChangeNotifierProvider(
           create: (context) => ApplicationState(),
+          lazy: false,
         ),
         ChangeNotifierProvider(
           create: (context) => ReportService(),
+          lazy: false,
         ),
         ChangeNotifierProvider(
           create: (context) => AnimalService(),
+          lazy: false,
         ),
         ChangeNotifierProvider(
           create: (context) => AdoptionService(),
+          lazy: false,
         ),
         ChangeNotifierProvider(
           create: (context) => MedicineService(),
+          lazy: false,
         ),
       ],
       child: App(

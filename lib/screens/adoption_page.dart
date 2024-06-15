@@ -59,7 +59,7 @@ class _AdoptionPageState extends State<AdoptionPage> {
       ),
       body: Consumer<AdoptionService>(
         builder: (context, adoptionService, _) {
-          if (adoptionService.isLoading && adoptionService.adoptions.isEmpty) {
+          if (adoptionService.isLoading) {
             // Show a loading circle
             return const Center(
               child: CircularProgressIndicator(),
