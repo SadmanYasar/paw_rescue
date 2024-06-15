@@ -6,6 +6,7 @@ class ReportService extends ChangeNotifier {
   final db = FirebaseFirestore.instance;
   List<Report> reports = [];
   bool _isLoading = false;
+  int monthlyRescues = 0;
 
   bool get isLoading => _isLoading;
 
@@ -115,5 +116,24 @@ class ReportService extends ChangeNotifier {
     }
   }
 
-  // Future getMonthlyRescues()
+  Future<void> getMonthlyRescues() async {
+    try {
+      final reportsCollection = await db.collection('reports').get();
+      reports = reportsCollection.docs
+          .map((doc) => Report.fromJson(doc.data()))
+          .toList();
+
+      final monthlyRescues = reports
+          .where((element) => element.rescued == 'true')
+          .where((element) =>
+              element.time.isAfter(DateTime.now().subtract(Duration(days: 30))))
+          .toList();
+
+      this.monthlyRescues = monthlyRescues.length;
+
+      notifyListeners();
+    } on Exception catch (e) {
+      throw Exception('Failed to get monthly rescues: $e');
+    }
+  }
 }
