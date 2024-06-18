@@ -16,6 +16,7 @@ import 'package:paw_rescue/screens/edit_adoption.dart';
 import 'package:paw_rescue/screens/edit_animal.dart';
 import 'package:paw_rescue/screens/edit_report.dart';
 import 'package:paw_rescue/screens/medication_page.dart';
+import 'package:paw_rescue/screens/pdf_adoption_page.dart';
 import 'package:paw_rescue/screens/reports_page.dart';
 
 import 'package:paw_rescue/screens/home_page.dart';
@@ -96,6 +97,16 @@ final router = GoRouter(
               path: 'reports',
               builder: (context, state) {
                 return ReportsPage();
+              },
+            ),
+            GoRoute(
+              path: 'pdf-adoption',
+              name: 'pdf-adoption',
+              builder: (context, state) {
+                Adoption adoption = state.extra as Adoption;
+                return PdfAdoptionScreen(
+                  adoption: adoption,
+                );
               },
             ),
             GoRoute(

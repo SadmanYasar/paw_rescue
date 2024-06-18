@@ -4,6 +4,7 @@ import 'package:paw_rescue/models/animal_model.dart';
 import 'package:paw_rescue/services/animal_data_service.dart';
 import 'package:paw_rescue/widgets/app_state.dart';
 import 'package:provider/provider.dart';
+import 'package:share_plus/share_plus.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -125,9 +126,21 @@ class _HomePageState extends State<HomePage> {
                                     ),
                                     Padding(
                                       padding: const EdgeInsets.all(8.0),
-                                      child: Text(
-                                        animal.breed,
-                                        style: TextStyle(fontSize: 16),
+                                      child: Row(
+                                        children: [
+                                          Text(
+                                            animal.breed,
+                                            style: TextStyle(fontSize: 16),
+                                          ),
+                                          // a share icon that shares the animal details
+                                          IconButton(
+                                            icon: const Icon(Icons.share),
+                                            onPressed: () {
+                                              Share.share(
+                                                  '${animal.name} • ${animal.age} • ${animal.breed} is up for adoption on Paw Rescue app. Download it from Play Store today!');
+                                            },
+                                          ),
+                                        ],
                                       ),
                                     ),
                                   ],

@@ -109,6 +109,8 @@ class ScaffoldWithNavBar extends StatelessWidget {
         ],
         currentIndex: context.select((ApplicationState s) => s.currentIndex),
         onTap: (int idx) => _onItemTapped(idx, context),
+        selectedFontSize: 12,
+        unselectedFontSize: 12,
       ),
     );
   }

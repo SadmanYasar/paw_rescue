@@ -48,6 +48,10 @@ dependencies:
   timeago: ^3.6.1
   url_launcher: ^6.3.0
   intl: ^0.18.1
+  pdf: ^3.10.8
+  printing: ^5.12.0
+  path_provider: ^2.1.3
+  share_plus: ^9.0.0
 
 dev_dependencies:
   flutter_test:

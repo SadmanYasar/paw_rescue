@@ -140,6 +140,13 @@ class _AdoptionPageState extends State<AdoptionPage> {
                                 Text(
                                     'Applied ${timeago.format(adoption.time)}'),
                                 Text('By ${adoption.userName}'),
+                                ElevatedButton(
+                                  onPressed: () {
+                                    context.pushNamed('pdf-adoption',
+                                        extra: adoption);
+                                  },
+                                  child: const Text('Get PDF'),
+                                ),
                               ],
                             ),
                             onTap: () {
