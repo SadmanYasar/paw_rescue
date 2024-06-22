@@ -47,7 +47,7 @@ class _MedicationScreenState extends State<MedicationScreen> {
               return InkWell(
                 onTap: () => {
                   launchUrl(Uri.parse(medicine.productLink),
-                      mode: LaunchMode.inAppWebView)
+                      mode: LaunchMode.inAppBrowserView)
                 },
                 child: Container(
                   padding: const EdgeInsets.all(8),
