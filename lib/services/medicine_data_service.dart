@@ -28,7 +28,8 @@ class MedicineService extends ChangeNotifier {
       _isLoading = false;
       notifyListeners();
     } on Exception catch (e) {
-      throw Exception('Failed to read medicines: $e');
+      print(e.toString());
+      _isLoading = false;
     }
   }
 }

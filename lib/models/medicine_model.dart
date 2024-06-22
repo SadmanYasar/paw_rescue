@@ -3,12 +3,14 @@ class Medicine {
   final double price;
   final String description;
   final String imageURL;
+  final String productLink;
 
   Medicine(
       {required this.name,
       required this.price,
       required this.description,
-      required this.imageURL});
+      required this.imageURL,
+      required this.productLink});
 
   factory Medicine.fromJson(Map<String, dynamic> json) {
     return Medicine(
@@ -16,6 +18,7 @@ class Medicine {
       price: json['price'] ?? 0.0,
       description: json['description'] ?? '',
       imageURL: json['imageURL'] ?? '',
+      productLink: json['productLink'] ?? '',
     );
   }
 
@@ -25,6 +28,7 @@ class Medicine {
       'price': price,
       'description': description,
       'imageURL': imageURL,
+      'productLink': productLink
     };
   }
 }
